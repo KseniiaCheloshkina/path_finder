@@ -2,34 +2,28 @@
 
 public class Cell
 {
-    private int _cntParent;
     public int X { get; set; }
-
     public int Y { get; set; }
 
-    // Расстояние от старта до точки
-    public int GetG { get; set; }
+    // Перемещения
+    public int distance_from_start { get; set; } // Расстояние от стартовой точки до текущей
+    public int distance_to_target { get; set; } // Эвристика - расстояние от текущей точки до целевой
+    public int final_distance => distance_from_start + distance_to_target;
+    public int price_hor_vert = 5;
+    public int price_diagonal = 7;
 
-    // Примерное расстояние от точки до конечной точки
-    public int GetH { get; set; }
-
-    // Вес точки
-    public int GetF => GetG + GetH;
-
-    public int CountParent => _cntParent;
-
-    public Cell Parent;
+    public int num_predecessors;
+    public Cell Predecessor;
 
     public Cell() { }
-
     public Cell(int[] position)
     {
         X = position[0];
         Y = position[1];
 
-        GetG = GetH = _cntParent = 0;
+        distance_from_start = distance_to_target = num_predecessors = 0;
 
-        Parent = null;
+        Predecessor = null;
     }
 
     public Cell(int x, int y)
@@ -37,9 +31,9 @@ public class Cell
         X = x;
         Y = y;
 
-        GetG = GetH = _cntParent = 0;
+        distance_from_start = distance_to_target = num_predecessors = 0;
 
-        Parent = null;
+        Predecessor = null;
     }
 
     public Cell(int x, int y, Cell parent)
@@ -48,21 +42,13 @@ public class Cell
         Y = y;
 
         if (x == parent.X || y == parent.Y)
-            GetG = parent.GetG + 10;
+            // вверх-вниз, влево-вправо
+            distance_from_start = parent.distance_from_start + price_hor_vert;
         else
-            GetG = parent.GetG + 14;
+            // по диагонали
+            distance_from_start = parent.distance_from_start + price_diagonal;
 
-        Parent = parent;
-        _cntParent = Parent._cntParent + 1;
+        Predecessor = parent;
+        num_predecessors = Predecessor.num_predecessors + 1;
     }
-
-    /*public static bool operator ==(Node node1, Node node2)
-    {
-        return node1.X == node2.X && node1.Y == node2.Y;
-    }
-
-    public static bool operator !=(Node node1, Node node2)
-    {
-        return !(node1 == node2);
-    }*/
 }

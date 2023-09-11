@@ -106,15 +106,15 @@ public class Algoritms
 
                 if (openNode == null)
                 {
-                    neighbour.GetH = (Math.Abs(_end_loc.X - neighbour.X) + Math.Abs(_end_loc.Y - neighbour.Y)) * 10;
+                    neighbour.distance_to_target = (Math.Abs(_end_loc.X - neighbour.X) + Math.Abs(_end_loc.Y - neighbour.Y)) * 10;
                     open.Add(neighbour);
                 }
                 else
                 {
-                    if (neighbour.GetG < openNode.GetG)
+                    if (neighbour.distance_from_start < openNode.distance_from_start)
                     {
-                        openNode.Parent = curNode;
-                        openNode.GetG = neighbour.GetG;
+                        openNode.Predecessor = curNode;
+                        openNode.distance_from_start = neighbour.distance_from_start;
                     }
                 }
             }
@@ -150,8 +150,8 @@ public class Algoritms
         return nodes;
     }
 
-    private static int SortByF(Cell node) => node.GetF;
-    private static int SortByG(Cell node) => node.GetG;
+    private static int SortByF(Cell node) => node.final_distance;
+    private static int SortByG(Cell node) => node.distance_from_start;
 
     private void WriteSolving()
     {
@@ -167,15 +167,15 @@ public class Algoritms
         }
         else
         {
-            Action?.Invoke($"Количество итераций: {_iter}\n" + $"Число ячеек: {_path.CountParent + 1}\n");
-            Action?.Invoke($"Вес пути: {_path.GetF}\n");
+            Action?.Invoke($"Количество итераций: {_iter}\n" + $"Число ячеек: {_path.num_predecessors + 1}\n");
+            Action?.Invoke($"Вес пути: {_path.final_distance}\n");
 
-            _path = _path.Parent;
+            _path = _path.Predecessor;
 
             while (_path.X != _start_loc.X || _path.Y != _start_loc.Y)
             {
                 listNode.Add(_path);
-                _path = _path.Parent;
+                _path = _path.Predecessor;
             }
         }
 
