@@ -2,6 +2,7 @@
 using CompareSearchPath.Common;
 using CompareSearchPath.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace CompareSearchPath.Service;
 
@@ -47,16 +48,17 @@ public static class Controller
                     break;
                 case "json":
                     var codeOp = CodeOp.SuccessRead;
-                    Console.Write("Введите название файла: ");
-                    var fullPath = @"..\..\..\Data\JsonFiles\" + Console.ReadLine();
+                    Console.WriteLine("Enter file name");
+                    var fullPath = @"..\..\..\data\input_data\" + Console.ReadLine();
 
                     if (!File.Exists(fullPath))
                     {
-                        Console.WriteLine("Файл не найден...");
+                        Console.WriteLine("No such file");
                         break;
                     }
-                    
+
                     // настройки для проверки возможности чтения файла
+
                     var settings = new JsonSerializerSettings
                     {
                         Error = (sender, e) =>
@@ -65,15 +67,27 @@ public static class Controller
                             e.ErrorContext.Handled = true;
                         }
                     };
-                    var model = JsonConvert.DeserializeObject<JsonModel>(File.ReadAllText(fullPath), settings);
-                    // если файл удалось прочитать
-                    if (model != null)
-                    {
-                        _dijkstra = new GeneralDijkstra(model.Map, model.Start, model.End);
-                    }
-                    Console.ForegroundColor = codeOp == CodeOp.SuccessRead ? ConsoleColor.Green : ConsoleColor.DarkRed;
-                    Console.WriteLine(codeOp.ToString());
-                    Console.ResetColor();
+                    var model = JsonConvert.DeserializeObject<JsonStructure>(File.ReadAllText(fullPath), settings);
+                    Console.WriteLine(model);
+                    // MY
+                    //var json_content= File.ReadAllText(fullPath);
+                    //JObject resJson = JObject.Parse(json_content);
+                    //Console.WriteLine(resJson);
+                    //Console.WriteLine(resJson["grid_size"]);
+                    //var grid_size = resJson["grid_size"].ToObject<List<int>>();
+                    //Console.WriteLine(grid_size);
+                    //JArray parsed_grid = JArray.Parse(grid_size);
+                    //Console.WriteLine(parsed_grid);
+                    //var walls = resJson["walls"];
+
+                    // OLD
+                    //if (model != null)
+                    //{
+                    //    _dijkstra = new GeneralDijkstra(model.Map, model.Start, model.End);
+                    //}
+                    //Console.ForegroundColor = codeOp == CodeOp.SuccessRead ? ConsoleColor.Green : ConsoleColor.DarkRed;
+                    //Console.WriteLine(codeOp.ToString());
+                    //Console.ResetColor();
                     break;
                 case "3":
                     // определяем размерности матрицы
