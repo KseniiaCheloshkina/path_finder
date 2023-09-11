@@ -14,39 +14,38 @@ public static class Controller
     {
         var k = ".";
 
-        var map = new bool[,] {};
-        int n, m;
+        var grid = new bool[,] {};
+        int width, height;
         var start = new Node();
         var end = new Node();
 
         while (k != "0")
         {
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("Выберите способ ввода данных:");
+            Console.WriteLine("Choose input type:");
             Console.ResetColor();
-            Console.WriteLine(" 1 - Ручной ввод");
-            Console.WriteLine(" 2 - Чтение из файла");
-            Console.WriteLine(" 3 - Сгенерировать карту");
-            Console.WriteLine(" 4 - Сохранить карту");
-            Console.WriteLine(" cls - Очистить консоль");
-            Console.WriteLine(" 0 - Выход");
+            Console.WriteLine(" man - insert in stdin");
+            Console.WriteLine(" json - read from file");
+            // Console.WriteLine(" 3 - Сгенерировать карту");
+            Console.WriteLine(" save - save input map");
+            // Console.WriteLine(" cls - Очистить консоль");
+            Console.WriteLine(" exit - exit the program");
             k = Console.ReadLine()?.ToLower();
             
             switch (k)
             {
-                case "1":
-                    // сначала определеяем размерности матрицы
-                    HelpInput.InputRangeMap(out n, out m);
-                    map = new bool[n, m];
-                    // выводим матрицу на консоль, чтобы пользователь мог взглянуть на нее
-                    HelpInput.ShowMap(map);
-                    // заполняем стены на карте
-                    HelpInput.InputMap(map);
-                    // выбор начальной и целевой точки
-                    HelpInput.InputStartEnd(out  start, out end, n, m);
-                    _dijkstra = new GeneralDijkstra(map, start, end);
+                // input from stdin
+                case "man":
+                    HelpInput.InputRangeMap(out width, out height, out grid); // get input size
+                    // TODO: add walls on the map in ShowMap
+                    HelpInput.InputMap(grid); // create walls
+                    Console.WriteLine("Insert coordinates of start position in format `x y`");
+                    HelpInput.InputPoint(out start, width, height);  // create start position
+                    Console.WriteLine("Insert coordinates of end position in format `x y`");
+                    HelpInput.InputPoint(out end, width, height); // create end position
+                    _dijkstra = new GeneralDijkstra(grid, start, end);
                     break;
-                case "2":
+                case "json":
                     var codeOp = CodeOp.SuccessRead;
                     Console.Write("Введите название файла: ");
                     var fullPath = @"..\..\..\Data\JsonFiles\" + Console.ReadLine();
@@ -78,25 +77,25 @@ public static class Controller
                     break;
                 case "3":
                     // определяем размерности матрицы
-                    HelpInput.InputRangeMap(out n, out m);
+                    HelpInput.InputRangeMap(out width, out height, out grid);
                     // определяем процент заполнения стен
                     HelpInput.InputPercentWallMap(out var p);
                     var rnd = new Random();
-                    var w = rnd.Next(0, n * m * p / 100);
-                    map = new bool[n, m];
+                    var w = rnd.Next(0, width * height * p / 100);
+                    grid = new bool[width, height];
                     // случайно заполнение стенами карты
                     for (int i = 0; i < w; i++)
                     {
-                        var _i = rnd.Next(0, n);
-                        var _j = rnd.Next(0, m);
-                        map[_i, _j] = true;
+                        var _i = rnd.Next(0, width);
+                        var _j = rnd.Next(0, height);
+                        grid[_i, _j] = true;
                     }
-                    Console.WriteLine($"Размеры карты: {n} на {m}");
-                    HelpInput.ShowMap(map);
-                    HelpInput.InputStartEnd(out  start, out end, n, m);
-                    _dijkstra = new GeneralDijkstra(map, start, end);
+                    Console.WriteLine($"Размеры карты: {width} на {height}");
+                    HelpInput.DrawGrid(grid);
+                    // HelpInput.InputStartEnd(out  start, out end, width, height);
+                    //_dijkstra = new GeneralDijkstra(map, start, end);
                     break;
-                case "4":
+                case "save":
                     if (_dijkstra.IsEmptyMap)
                     {
                         Console.ForegroundColor = ConsoleColor.DarkYellow;
@@ -118,10 +117,10 @@ public static class Controller
                     Console.WriteLine("Файл записан");
                     Console.ResetColor();
                     break;
-                case "cls":
-                    Console.Clear();
-                    break;
-                case "0":
+                // case "cls":
+                //    Console.Clear();
+                //    break;
+                case "exit":
                     Console.Clear();
                     break;
             }

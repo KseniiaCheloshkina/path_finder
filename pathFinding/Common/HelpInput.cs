@@ -1,4 +1,5 @@
-﻿using CompareSearchPath.Models;
+﻿using System.Runtime.InteropServices;
+using CompareSearchPath.Models;
 
 namespace CompareSearchPath.Common;
 
@@ -23,8 +24,8 @@ public static class HelpInput
         }
     }
     
-    // метод выводв матрицы на консоль
-    public static void ShowMap(bool[,] map)
+    // print grid
+    public static void DrawGrid(bool[,] map)
     {
         var maxLenCol = map.GetLength(1).ToString().Length + 1;
         var maxLenRow = map.GetLength(0).ToString().Length + 1;
@@ -55,67 +56,70 @@ public static class HelpInput
         }
     }
 
-    // метод для ввода стен на карте
+    // Define walls on the map
     public static void InputMap(bool[,] map)
     {
-        Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.WriteLine("Введите кол-во стен карты:");
-        Console.ResetColor();
-        var n = -1;
-        while (n < 0)
+        // Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine("Input number of walls");
+        // Console.ResetColor();
+        var num_walls = -999;
+        var mess = "Insert positive number";
+        while (num_walls < 0)
         {
             var tmp = Console.ReadLine();
-            if (!int.TryParse(tmp, out n))
+            if (!int.TryParse(tmp, out num_walls))
             {
-                Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.WriteLine("Некорректное значение. Повторите попытку:");
-                Console.ResetColor();
-                n = -1;
+                // Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine(mess);
+                // Console.ResetColor();
+                num_walls = -999;
             }
-            else if (n < 0)
+            else if (num_walls < 0)
             {
-                Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.WriteLine("Введено отрицательное число. Повторите попытку:");
-                Console.ResetColor();
+                //Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine(mess);
+                // Console.ResetColor();
             }
+
         }
 
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < num_walls; i++)
         {
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine($"Введите координаты {i + 1} стены через пробел");
-            Console.ResetColor();
+            // Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"Insert coordinate of {i + 1} wall using the following format: `x y`");
+            // Console.ResetColor();
+            Console.WriteLine(map.GetLength(0));
+            Console.WriteLine(map.GetLength(1));
+            Console.WriteLine(map);
             InputPoint(out var node, map.GetLength(0), map.GetLength(1));
             map[node.X, node.Y] = true;
         }
     }
 
-    // метод для ввода и проверки валидности размерности матрицы
-    public static void InputRangeMap(out int n, out int m)
+    // Manual map designing
+    public static void InputRangeMap(out int width, out int height, out bool[,] map)
     {
-        n = 0;
-        m = 0;
-        Console.WriteLine("Введите диапазон размера карты через пробел.");
-        Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.WriteLine("Кол-во строк и кол-во столбцов карты соответственно: ");
+        width = 0;
+        height = 0;
+        // Console.WriteLine("Введите диапазон размера карты через пробел.");
+        // Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine("Insert number of rows and number of columns splitted by whitespace");
         Console.ResetColor();
-        // цикл выполняется пока введенные данные не будут удовлетворять верным данным
-        while (n < 2 || m < 2)
+        while (width < 2 || height < 2)
         {
             var tmp = Console.ReadLine().Split();
-            if (tmp.Length != 2 || !int.TryParse(tmp[0], out n) || !int.TryParse(tmp[1], out m))
+            if (tmp.Length != 2 || !int.TryParse(tmp[0], out width) || !int.TryParse(tmp[1], out height) || width < 2 || height < 2)
             {
-                Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.WriteLine("Некорректное значение. Повторите попытку:");
-                Console.ResetColor();
-            }
-            else if (n < 2 || m < 2)
-            {
-                Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.WriteLine("Размеры должен быть минимум 2");
+                // Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine("You must specify 2 numbers in format `x y`. Both `x` and `y` should be not less than 2");
                 Console.ResetColor();
             }
         }
+
+        // create grid
+        // var map = new bool[,] { };
+        map = new bool[width, height];
+        DrawGrid(map);
     }
 
     // метод для ввода значения процента стен на карте
@@ -144,40 +148,28 @@ public static class HelpInput
         }
     }
 
-    // метод для ввода стартовой и целевой точек
-    public static void InputStartEnd(out Node start, out Node end, int n, int m)
-    {
-        Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.WriteLine("Введите координаты стартовой точки через пробел:");
-        Console.ResetColor();
-        InputPoint(out start, n, m);
-        
-        Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.WriteLine("Введите координаты целевой точки через пробел:");
-        Console.ResetColor();
-        InputPoint(out end, n, m);
-    }
 
-    // метод для ввода и проверки валидности точки
-    private static void InputPoint(out Node node, int n = int.MaxValue, int m = int.MaxValue)
+    // Define wall coordinate
+    public static void InputPoint(out Node node, int width = int.MaxValue, int height = int.MaxValue)
     {
+        // position of new wall
         var loc = new int[] {-1, -1};
-        while (loc[0] < 0 || loc[0] >= n || loc[1] < 0 || loc[1] >= m)
+        while (loc[0] < 0 || loc[0] >= width || loc[1] < 0 || loc[1] >= height)
         {
-            var tmp = Console.ReadLine().Split();
-            if (tmp.Length != 2 || !int.TryParse(tmp[0], out loc[0]) || !int.TryParse(tmp[1], out loc[1]))
+            var input_str = Console.ReadLine().Split();
+            if (input_str.Length != 2 || !int.TryParse(input_str[0], out loc[0]) || !int.TryParse(input_str[1], out loc[1]))
             {
-                Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.WriteLine("Некорректное значение. Повторите попытку:");
-                Console.ResetColor();
+                // Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine("You should insert two numbers in format `x y`");
+                // Console.ResetColor();
                 loc[0] = -1;
                 loc[1] = -1;
             }
-            else if (loc[0] < 0 || loc[0] >= n || loc[1] < 0 || loc[1] >= m)
+            else if (loc[0] < 0 || loc[0] >= width || loc[1] < 0 || loc[1] >= height)
             {
-                Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.WriteLine("Выход за пределы карты. Повторите попытку:");
-                Console.ResetColor();
+                //Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine($"First coordinate should be less than {width}, second coordinate should be less than {height}");
+                //Console.ResetColor();
             }
         }
         node = new Node(loc[0], loc[1]);
