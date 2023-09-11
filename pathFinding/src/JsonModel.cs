@@ -1,6 +1,6 @@
 ﻿namespace pathFinding.src;
 
-public class JsonStructure
+public class JsonModel
 {
     public int[] grid_size { get; set; }
     public int[][] walls { get; set; }
