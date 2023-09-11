@@ -21,6 +21,16 @@ public class Node
     public Node Parent;
 
     public Node() { }
+
+    public Node(int[] position)
+    {
+        X = position[0];
+        Y = position[1];
+
+        GetG = GetH = _cntParent = 0;
+
+        Parent = null;
+    }
     
     public Node(int x, int y)
     {

@@ -50,6 +50,7 @@ public static class Controller
                     var codeOp = CodeOp.SuccessRead;
                     Console.WriteLine("Enter file name");
                     var fullPath = @"..\..\..\data\input_data\" + Console.ReadLine();
+                    //string[] mapFiles = Directory.GetFiles(fullPath);
 
                     if (!File.Exists(fullPath))
                     {
@@ -67,6 +68,7 @@ public static class Controller
                             e.ErrorContext.Handled = true;
                         }
                     };
+
                     var model = JsonConvert.DeserializeObject<JsonStructure>(File.ReadAllText(fullPath), settings);
                     Console.WriteLine(model);
                     // MY
@@ -81,13 +83,14 @@ public static class Controller
                     //var walls = resJson["walls"];
 
                     // OLD
-                    //if (model != null)
-                    //{
-                    //    _dijkstra = new GeneralDijkstra(model.Map, model.Start, model.End);
-                    //}
-                    //Console.ForegroundColor = codeOp == CodeOp.SuccessRead ? ConsoleColor.Green : ConsoleColor.DarkRed;
-                    //Console.WriteLine(codeOp.ToString());
-                    //Console.ResetColor();
+                    if (model != null)
+                    {
+                        var new_grid = new Grid(model);
+                        _dijkstra = new GeneralDijkstra(new_grid.generate_grid(), new Node(model.start_node), new Node(model.end_node));
+                    }
+                    Console.ForegroundColor = codeOp == CodeOp.SuccessRead ? ConsoleColor.Green : ConsoleColor.DarkRed;
+                    Console.WriteLine(codeOp.ToString());
+                    Console.ResetColor();
                     break;
                 case "3":
                     // определяем размерности матрицы
