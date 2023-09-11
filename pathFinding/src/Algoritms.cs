@@ -31,17 +31,20 @@ public class Algoritms
 
     public Algoritms(bool[,] grid, Cell start_pos, Cell end_pos)
     {
+       // Grid validation
         if (grid.GetLength(0) == 0 || grid.GetLength(1) == 0)
-            throw new IndexOutOfRangeException("Карта пуста");
-        if (start_pos.X < 0 || start_pos.Y < 0 || start_pos.X >= grid.GetLength(0) || start_pos.Y >= grid.GetLength(1))
-            throw new IndexOutOfRangeException("Стартовая точка лежит вне диапазонах карты");
-
-        if (end_pos.X < 0 || end_pos.Y < 0 || end_pos.X >= grid.GetLength(0) || end_pos.Y >= grid.GetLength(1))
-            throw new IndexOutOfRangeException("Конечная точка лежит вне диапазонах карты");
+            throw new IndexOutOfRangeException("Grid should not be empty");
 
         if (start_pos.X == end_pos.X && start_pos.Y == end_pos.Y)
-            throw new Exception("Стартовая и конечная точки совпадают");
+            throw new Exception("Start and end positions are the same");
 
+        out_of_range_condition_start = (0 <= start_pos.X && start_pos.X <= grid.GetLength(0)) && (0 <= start_pos.Y && start_pos.Y <= grid.GetLength(1))
+        out_of_range_condition_end = (0 <= end_pos.X && end_pos.X <= grid.GetLength(0)) && (0 <= end_pos.Y && end_pos.Y <= grid.GetLength(1))
+
+        if (!out_of_range_condition_start || !out_of_range_condition_end)
+            throw new IndexOutOfRangeException("Start and end positions should be inside a grid");
+
+        // create a copy of grid
         _grid = new bool[grid.GetLength(0), grid.GetLength(1)];
         for (int i = 0; i < grid.GetLength(0); i++)
         {
@@ -76,41 +79,67 @@ public class Algoritms
         WriteSolving();
     }
 
-    // основной путь нахождения пути
+    private static int SortByF(Cell node) => node.final_distance;
+    private static int SortByG(Cell node) => node.distance_from_start;
+
+    public int min_distance_cell(List<Cell> list_cells)
+   {
+       int min_val = int.MaxValue;
+       Cell final_cell = Cell();
+
+       foreach (var cur_cell in list_cells)
+       {
+            if (cur_cell. < min_val){
+                min_val = cur_cell
+                final_cell = cur_cell
+                }
+            }
+       return final_cell;
+   }
+
     private void FindPath(Func<Cell, int> selector)
     {
-        _iter = 0;
-        var open = new List<Cell> { _start_loc };
-        var close = new List<Cell>();
+        _iter = 1;
+        // set of cells to go to
+        var open_set = new List<Cell> { _start };
+        // set of already passed cells
+        var closed_set = new List<Cell>();
 
-        while (open.Count > 0)
+        // iterate through all cells
+        while (open_set.Count > 0)
         {
-            _iter++;
-            var curNode = open.MinBy(selector);
+            // get cell with min cum distance
+            //var curNode = open_set.OrderBy(selector);
+            var curNode = min_distance_cell(open_set);
 
+            // if we already found it
             if (curNode.X == _end_loc.X && curNode.Y == _end_loc.Y)
             {
                 _path = curNode;
                 return;
             }
 
-            open.Remove(curNode);
-            close.Add(curNode);
+            open_set.Remove(curNode);
+            closed_set.Add(curNode);
 
+            // for each neighbor calculate distance and add to open set
             foreach (var neighbour in GetNeighbours(curNode))
             {
-                if (close.Any(item => item.X == neighbour.X && item.Y == neighbour.Y))
+                // if cell is in closed set
+                if (closed_set.Any(item => item.X == neighbour.X && item.Y == neighbour.Y))
                     continue;
 
-                var openNode = open.FirstOrDefault(item => item.X == neighbour.X && item.Y == neighbour.Y);
-
+                // select neighbour from open set or default val
+                var openNode = open_set.FirstOrDefault(item => item.X == neighbour.X && item.Y == neighbour.Y);
+                // if neighbour is not in open set, add it
                 if (openNode == null)
                 {
-                    neighbour.distance_to_target = (Math.Abs(_end_loc.X - neighbour.X) + Math.Abs(_end_loc.Y - neighbour.Y)) * 10;
-                    open.Add(neighbour);
+                    // calc euclidean distance
+                    neighbour.distance_to_target = (Math.Sqrt(Math.Pow(_end_loc.X - neighbour.X, 2) + Math.Pow(_end_loc.Y - neighbour.Y, 2)) * 5;
+                    open_set.Add(neighbour);
                 }
                 else
-                {
+                {   // if current path to neighbor is more optimal than previos, replace it
                     if (neighbour.distance_from_start < openNode.distance_from_start)
                     {
                         openNode.Predecessor = curNode;
@@ -118,6 +147,7 @@ public class Algoritms
                     }
                 }
             }
+            _iter++;
         }
         _path = null;
     }
@@ -149,9 +179,6 @@ public class Algoritms
 
         return nodes;
     }
-
-    private static int SortByF(Cell node) => node.final_distance;
-    private static int SortByG(Cell node) => node.distance_from_start;
 
     private void WriteSolving()
     {

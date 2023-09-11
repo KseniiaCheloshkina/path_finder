@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿// TODO: check whether it is needed
+using System.Runtime.InteropServices;
 
 namespace pathFinding.src;
 
