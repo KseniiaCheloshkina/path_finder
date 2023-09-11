@@ -2,7 +2,6 @@
 using CompareSearchPath.Common;
 using CompareSearchPath.Models;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace CompareSearchPath.Service;
 
@@ -50,7 +49,6 @@ public static class Controller
                     var codeOp = CodeOp.SuccessRead;
                     Console.WriteLine("Enter file name");
                     var fullPath = @"..\..\..\data\input_data\" + Console.ReadLine();
-                    //string[] mapFiles = Directory.GetFiles(fullPath);
 
                     if (!File.Exists(fullPath))
                     {
@@ -58,35 +56,14 @@ public static class Controller
                         break;
                     }
 
-                    // настройки для проверки возможности чтения файла
-
-                    var settings = new JsonSerializerSettings
-                    {
-                        Error = (sender, e) =>
-                        {
-                            codeOp = CodeOp.FailedReadFile;
-                            e.ErrorContext.Handled = true;
-                        }
-                    };
-
-                    var model = JsonConvert.DeserializeObject<JsonStructure>(File.ReadAllText(fullPath), settings);
+                    var model = JsonConvert.DeserializeObject<JsonStructure>(File.ReadAllText(fullPath));
                     Console.WriteLine(model);
-                    // MY
-                    //var json_content= File.ReadAllText(fullPath);
-                    //JObject resJson = JObject.Parse(json_content);
-                    //Console.WriteLine(resJson);
-                    //Console.WriteLine(resJson["grid_size"]);
-                    //var grid_size = resJson["grid_size"].ToObject<List<int>>();
-                    //Console.WriteLine(grid_size);
-                    //JArray parsed_grid = JArray.Parse(grid_size);
-                    //Console.WriteLine(parsed_grid);
-                    //var walls = resJson["walls"];
 
-                    // OLD
                     if (model != null)
                     {
                         var new_grid = new Grid(model);
-                        _dijkstra = new GeneralDijkstra(new_grid.generate_grid(), new Node(model.start_node), new Node(model.end_node));
+                        var grid_matrix = new_grid.generate_grid();
+                        _dijkstra = new GeneralDijkstra(grid_matrix, new Node(model.start_node), new Node(model.end_node));
                     }
                     Console.ForegroundColor = codeOp == CodeOp.SuccessRead ? ConsoleColor.Green : ConsoleColor.DarkRed;
                     Console.WriteLine(codeOp.ToString());

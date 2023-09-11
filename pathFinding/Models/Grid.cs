@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.Diagnostics;
+using System.Security.Cryptography;
 
 namespace CompareSearchPath.Models;
 
@@ -16,7 +17,13 @@ public class Grid
 
     public bool[,] generate_grid() 
     {
-        var grid_matrix = new bool[grid_params.grid_size];
+        grid_matrix = new bool[grid_params.grid_size[0], grid_params.grid_size[1]];
+
+        // set walls
+        foreach (var wall in grid_params.walls)
+        {
+            grid_matrix[wall[0], wall[1]] = true;
+        }
         return grid_matrix;
     }
 
