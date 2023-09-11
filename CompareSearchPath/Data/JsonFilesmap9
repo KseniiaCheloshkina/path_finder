@@ -1,0 +1,1 @@
+{"N":4,"M":7,"Map":[[true,false,false,false,false,true,false],[false,false,false,false,false,false,true],[false,false,false,false,false,false,false],[false,false,false,false,true,true,false]],"Start":{"Parent":null,"X":1,"Y":1,"GetG":0,"GetH":0,"GetF":0,"CountParent":0},"End":{"Parent":null,"X":3,"Y":6,"GetG":0,"GetH":0,"GetF":0,"CountParent":0}}
