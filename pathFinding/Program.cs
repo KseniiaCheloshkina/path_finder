@@ -1,6 +1,6 @@
-﻿using CompareSearchPath.Service;
+﻿using pathFinding.src;
 
-namespace CompareSearchPath;
+namespace PathFinding;
 
 class Program
 {
@@ -38,10 +38,10 @@ class Program
             switch (k)
             {
                 case "1":
-                    Controller.InputData();
+                    Menu.InputData();
                     break;
                 case "2":
-                    Controller.ExecuteProgram();
+                    Menu.ExecuteProgram();
                     break;
                 case "3":
                     Console.WriteLine(File.ReadAllText(@"..\..\..\Data\Readme.txt"));

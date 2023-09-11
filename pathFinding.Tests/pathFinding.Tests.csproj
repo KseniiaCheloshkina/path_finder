@@ -17,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\CompareSearchPath\CompareSearchPath.csproj" />
+      <ProjectReference Include="..\pathFinding\pathFinding.csproj" />
     </ItemGroup>
 
 </Project>

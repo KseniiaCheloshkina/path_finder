@@ -1,7 +1,7 @@
-﻿using CompareSearchPath.Algorithms;
-using CompareSearchPath.Models;
+﻿using PathFinding.Algorithms;
+using PathFinding.Models;
 
-namespace CompareSearchPath.Tests;
+namespace PathFinding.Tests;
 
 public class AlgorithmAStarBoundaryValueTests
 {
