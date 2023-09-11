@@ -1,15 +1,12 @@
-﻿using System.Diagnostics;
-using System.Security.Cryptography;
-
-namespace pathFinding.src;
+﻿namespace pathFinding.src;
 
 public class Grid
 {
-    public JsonStructure grid_params { get; set; }
+    public JsonModel grid_params { get; set; }
 
     public bool[,] grid_matrix;
 
-    public Grid(JsonStructure grid_params)
+    public Grid(JsonModel grid_params)
     {
         this.grid_params = grid_params;
 

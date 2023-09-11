@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-
-namespace pathFinding.src;
+﻿namespace pathFinding.src;
 
 public static class FillGraph
 {
@@ -56,7 +54,7 @@ public static class FillGraph
     }
 
     // Define walls on the map
-    public static void InputMap(bool[,] map)
+    public static void DefineWalls(bool[,] map)
     {
         // Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine("Input number of walls");
@@ -87,16 +85,13 @@ public static class FillGraph
             // Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine($"Insert coordinate of {i + 1} wall using the following format: `x y`");
             // Console.ResetColor();
-            Console.WriteLine(map.GetLength(0));
-            Console.WriteLine(map.GetLength(1));
-            Console.WriteLine(map);
             InputPoint(out var node, map.GetLength(0), map.GetLength(1));
             map[node.X, node.Y] = true;
         }
     }
 
     // Manual map designing
-    public static void InputRangeMap(out int width, out int height, out bool[,] map)
+    public static void GridCreation(out int width, out int height, out bool[,] map)
     {
         width = 0;
         height = 0;
@@ -119,32 +114,6 @@ public static class FillGraph
         // var map = new bool[,] { };
         map = new bool[width, height];
         DrawGrid(map);
-    }
-
-    // метод для ввода значения процента стен на карте
-    public static void InputPercentWallMap(out int p)
-    {
-        p = -1;
-        Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.WriteLine("Введите процент заполнения стен: ");
-        Console.ResetColor();
-        while (p < 0)
-        {
-            if (!int.TryParse(Console.ReadLine(), out p))
-            {
-                Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.WriteLine("Некорректное значение. Повторите попытку:");
-                Console.ResetColor();
-                p = -1;
-            }
-            else if (p > 100)
-            {
-                Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.WriteLine("Процент должен быть в диапазоне [0;100]. Повторите попытку:");
-                Console.ResetColor();
-                p = -1;
-            }
-        }
     }
 
 
