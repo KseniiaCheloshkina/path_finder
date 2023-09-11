@@ -29,7 +29,8 @@ public static class Menu
                 FindSolution();
                 break;
             case "Help":
-                Console.WriteLine(File.ReadAllText(@"..\..\..\Data\Readme.txt"));
+                Console.WriteLine(File.ReadAllText(@"..\..\..\Data\Help.txt"));
+                MainMenu();
                 break;
         }
     }
@@ -187,23 +188,17 @@ public static class Menu
                 FillGraph.InputNameFile(out path);
                 algoritm.AStarAlgo();
                 File.WriteAllText(path, bufferString);
-                Console.ForegroundColor = ConsoleColor.DarkGreen;
-                Console.WriteLine("Файл записан");
-                Console.ResetColor();
+                AnsiConsole.Markup("[darkgreen]Файл записан[/]\n");
                 break;
             case "Algo Dikstra":
                 FillGraph.InputNameFile(out path);
                 algoritm.DijkstraAlgo();
                 File.WriteAllText(path, bufferString);
-                Console.ForegroundColor = ConsoleColor.DarkGreen;
-                Console.WriteLine("Файл записан");
-                Console.ResetColor();
-                break;
-            case "Back":
-                MainMenu();
+                AnsiConsole.Markup("[darkgreen]Файл записан[/]\n");
                 break;
         }
         // сбрасываем запись в файл на вывод на экран
         algoritm.ResetAction();
+        MainMenu();
     }
 }
