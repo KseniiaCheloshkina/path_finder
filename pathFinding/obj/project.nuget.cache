@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "hcuPIfhryFc2z8ddcoaOSUm+R3b6V0iBCasLzxmu5RIzaC36g0Vfm4O/gA0R5lBoM57jNR+XxS15L4wxne/iVw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\ksche\\Desktop\\pathfinding\\pathFinding\\pathFinding\\pathFinding.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\ksche\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

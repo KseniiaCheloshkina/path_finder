@@ -1,0 +1,33 @@
+﻿{
+  "N": 19,
+  "M": 21,
+  "Map": [
+    [true, false, true, true, false, true, false, false, true, true, false, true, false, false, true, false, false, true, true, false, false],
+    [true, true, false, false, false, false, true, true, false, true, true, true, false, true, false, false, false, false, true, true, true],
+    [false, true, false, false, true, true, true, false, false, false, true, false, true, true, true, false, true, true, true, false, false],
+    [false, true, true, false, true, true, false, false, true, false, false, false, true, false, true, true, true, true, false, false, false],
+    [true, false, true, true, false, false, false, true, true, false, false, true, false, false, false, true, false, false, false, true, true],
+    [true, false, false, true, false, true, false, false, false, true, true, true, true, true, false, false, false, false, false, false, true],
+    [true, false, false, false, true, true, true, true, true, false, false, false, false, false, true, true, true, true, true, true, false],
+    [false, true, false, false, true, true, true, true, true, false, false, false, true, false, true, true, true, true, true, true, false],
+    [true, true, true, true, false, false, false, false, false, true, true, true, true, true, false, false, false, false, false, false, true],
+    [true, false, true, true, false, false, false, false, false, true, true, true, true, true, false, false, false, false, false, false, true],
+    [true, false, false, false, true, true, true, true, true, false, false, false, false, false, true, true, true, true, true, true, false],
+    [true, true, false, false, true, false, true, false, true, false, true, false, true, true, false, false, false, false, true, true, false],
+    [true, true, false, false, true, false, true, false, true, false, true, false, true, true, false, false, false, false, true, true, false],
+    [false, false, true, true, false, false, true, true, true, true, false, false, false, false, true, true, true, true, false, false, true],
+    [false, false, true, true, false, false, true, true, true, true, false, false, false, false, true, true, true, true, false, false, true],
+    [true, true, false, false, true, false, true, false, true, false, true, false, true, true, false, false, false, false, true, true, false],
+    [true, true, false, false, true, false, true, false, true, false, true, false, true, true, false, false, false, false, true, true, false],
+    [false, false, true, true, false, false, true, true, true, true, false, false, false, false, true, true, true, true, false, false, true],
+    [false, false, true, true, false, false, true, true, true, true, false, false, false, false, true, true, true, true, false, false, true]
+  ],
+  "Start": {
+    "X": 11,
+    "Y": 0
+  },
+  "End": {
+    "X": 13,
+    "Y": 20
+  }
+}

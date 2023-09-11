@@ -1,0 +1,24 @@
+﻿{
+  "N": 10,
+  "M": 15,
+  "Map": [
+    [true, false, false, false, true, true, false, false, false, false, true, false, false, false, true],
+    [false, false, false, false, false, false, false, false, true, false, false, false, true, true, true],
+    [false, false, false, false, false, false, true, true, false, false, false, true, true, false, false],
+    [true, false, false, false, false, false, false, false, false, true, false, false, true, false, false],
+    [false, false, false, true, false, false, false, false, true, true, false, false, false, true, false],
+    [false, false, false, false, false, true, true, true, false, false, false, false, false, false, false],
+    [true, true, true, false, false, false, false, false, false, false, true, false, false, false, true],
+    [false, false, false, false, false, false, true, false, false, false, false, false, false, true, true],
+    [false, true, false, false, false, false, false, false, true, false, true, false, false, false, false],
+    [false, false, true, false, true, false, false, true, false, false, false, false, false, false, true]
+  ],
+  "Start": {
+    "X": 0,
+    "Y": 9
+  },
+  "End": {
+    "X": 9,
+    "Y": 0
+  }
+}

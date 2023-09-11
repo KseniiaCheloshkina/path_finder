@@ -1,0 +1,17 @@
+C:\Users\ksche\Desktop\pathfinding\pathFinding\pathFinding\bin\Debug\net7.0\pathFinding.exe
+C:\Users\ksche\Desktop\pathfinding\pathFinding\pathFinding\bin\Debug\net7.0\pathFinding.deps.json
+C:\Users\ksche\Desktop\pathfinding\pathFinding\pathFinding\bin\Debug\net7.0\pathFinding.runtimeconfig.json
+C:\Users\ksche\Desktop\pathfinding\pathFinding\pathFinding\bin\Debug\net7.0\pathFinding.dll
+C:\Users\ksche\Desktop\pathfinding\pathFinding\pathFinding\bin\Debug\net7.0\pathFinding.pdb
+C:\Users\ksche\Desktop\pathfinding\pathFinding\pathFinding\bin\Debug\net7.0\Newtonsoft.Json.dll
+C:\Users\ksche\Desktop\pathfinding\pathFinding\pathFinding\obj\Debug\net7.0\pathFinding.csproj.AssemblyReference.cache
+C:\Users\ksche\Desktop\pathfinding\pathFinding\pathFinding\obj\Debug\net7.0\pathFinding.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ksche\Desktop\pathfinding\pathFinding\pathFinding\obj\Debug\net7.0\pathFinding.AssemblyInfoInputs.cache
+C:\Users\ksche\Desktop\pathfinding\pathFinding\pathFinding\obj\Debug\net7.0\pathFinding.AssemblyInfo.cs
+C:\Users\ksche\Desktop\pathfinding\pathFinding\pathFinding\obj\Debug\net7.0\pathFinding.csproj.CoreCompileInputs.cache
+C:\Users\ksche\Desktop\pathfinding\pathFinding\pathFinding\obj\Debug\net7.0\pathFinding.csproj.CopyComplete
+C:\Users\ksche\Desktop\pathfinding\pathFinding\pathFinding\obj\Debug\net7.0\pathFinding.dll
+C:\Users\ksche\Desktop\pathfinding\pathFinding\pathFinding\obj\Debug\net7.0\refint\pathFinding.dll
+C:\Users\ksche\Desktop\pathfinding\pathFinding\pathFinding\obj\Debug\net7.0\pathFinding.pdb
+C:\Users\ksche\Desktop\pathfinding\pathFinding\pathFinding\obj\Debug\net7.0\pathFinding.genruntimeconfig.cache
+C:\Users\ksche\Desktop\pathfinding\pathFinding\pathFinding\obj\Debug\net7.0\ref\pathFinding.dll
