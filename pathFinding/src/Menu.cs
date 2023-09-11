@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Spectre.Console;
 
 namespace pathFinding.src;
 
@@ -6,8 +7,34 @@ public static class Menu
 {
     private static Algoritms _dijkstra = new Algoritms();
 
+    public static void MainMenu()
+    {
+        var operation = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+                .Title("Choose an operation?")
+                .PageSize(5)
+                .AddChoices(new[] {
+                    "Set data",
+                    "Find a solution",
+                    "Help"
+                }));
+
+        switch (operation)
+        {
+            case "Set data":
+                SetData();
+                break;
+            case "Find a solution":
+                FindSolution();
+                break;
+            case "Help":
+                Console.WriteLine(File.ReadAllText(@"..\..\..\Data\Readme.txt"));
+                break;
+        }
+    }
+
     // метод ввода данных карты и стартовой и целевой точек
-    public static void InputData()
+    public static void SetData()
     {
         var k = ".";
 
@@ -16,108 +43,122 @@ public static class Menu
         var start = new Cell();
         var end = new Cell();
 
-        while (k != "0")
+
+        var operation = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+                .Title("Choose an input type?")
+                .PageSize(5)
+                .AddChoices(new[] {
+                            "Insert in stdin",
+                            "Read from file",
+                            "Save file",
+                            "Exit"
+                }));
+
+        switch (operation)
         {
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("Choose input type:");
-            Console.ResetColor();
-            Console.WriteLine(" man - insert in stdin");
-            Console.WriteLine(" json - read from file");
-            // Console.WriteLine(" 3 - Сгенерировать карту");
-            Console.WriteLine(" save - save input map");
-            // Console.WriteLine(" cls - Очистить консоль");
-            Console.WriteLine(" exit - exit the program");
-            k = Console.ReadLine()?.ToLower();
+            case "Set data":
+                SetData();
+                break;
+            case "Find a solution":
+                FindSolution();
+                break;
+            case "Help":
+                Console.WriteLine(File.ReadAllText(@"..\..\..\Data\Readme.txt"));
+                break;
+        }
+        switch (k)
+        {
+            // input from stdin
+            case "man":
+                FillGraph.InputRangeMap(out width, out height, out grid); // get input size
+                                                                          // TODO: add walls on the map in ShowMap
+                FillGraph.InputMap(grid); // create walls
+                Console.WriteLine("Insert coordinates of start position in format `x y`");
+                FillGraph.InputPoint(out start, width, height);  // create start position
+                Console.WriteLine("Insert coordinates of end position in format `x y`");
+                FillGraph.InputPoint(out end, width, height); // create end position
+                _dijkstra = new Algoritms(grid, start, end);
+                break;
+            case "json":
+                Console.WriteLine("Enter file name");
+                var fullPath = @"..\..\..\data\input_data\" + Console.ReadLine();
 
-            switch (k)
-            {
-                // input from stdin
-                case "man":
-                    FillGraph.InputRangeMap(out width, out height, out grid); // get input size
-                    // TODO: add walls on the map in ShowMap
-                    FillGraph.InputMap(grid); // create walls
-                    Console.WriteLine("Insert coordinates of start position in format `x y`");
-                    FillGraph.InputPoint(out start, width, height);  // create start position
-                    Console.WriteLine("Insert coordinates of end position in format `x y`");
-                    FillGraph.InputPoint(out end, width, height); // create end position
-                    _dijkstra = new Algoritms(grid, start, end);
+                if (!File.Exists(fullPath))
+                {
+                    Console.WriteLine("No such file");
                     break;
-                case "json":
-                    Console.WriteLine("Enter file name");
-                    var fullPath = @"..\..\..\data\input_data\" + Console.ReadLine();
+                }
 
-                    if (!File.Exists(fullPath))
-                    {
-                        Console.WriteLine("No such file");
-                        break;
-                    }
+                var model = JsonConvert.DeserializeObject<JsonStructure>(File.ReadAllText(fullPath));
 
-                    var model = JsonConvert.DeserializeObject<JsonStructure>(File.ReadAllText(fullPath));
-
-                    if (model != null)
-                    {
-                        var new_grid = new Grid(model);
-                        var grid_matrix = new_grid.generate_grid();
-                        _dijkstra = new Algoritms(grid_matrix, new Cell(model.start_node), new Cell(model.end_node));
-                    }
-                    Console.WriteLine("!Read successfuly\n");
-                    break;
-                case "3":
-                    // определяем размерности матрицы
-                    FillGraph.InputRangeMap(out width, out height, out grid);
-                    // определяем процент заполнения стен
-                    FillGraph.InputPercentWallMap(out var p);
-                    var rnd = new Random();
-                    var w = rnd.Next(0, width * height * p / 100);
-                    grid = new bool[width, height];
-                    // случайно заполнение стенами карты
-                    for (int i = 0; i < w; i++)
-                    {
-                        var _i = rnd.Next(0, width);
-                        var _j = rnd.Next(0, height);
-                        grid[_i, _j] = true;
-                    }
-                    Console.WriteLine($"Размеры карты: {width} на {height}");
-                    FillGraph.DrawGrid(grid);
-                    // HelpInput.InputStartEnd(out  start, out end, width, height);
-                    //_dijkstra = new GeneralDijkstra(map, start, end);
-                    break;
-                case "save":
-                    if (_dijkstra.IsEmptyMap)
-                    {
-                        Console.ForegroundColor = ConsoleColor.DarkYellow;
-                        Console.WriteLine("Сначала введите данные!");
-                        Console.ResetColor();
-                        break;
-                    }
-                    Console.Write("Введите название файла: ");
-                    var fName = Console.ReadLine();
-                    File.WriteAllText(@"..\..\..\Data\JsonFiles" + fName, JsonConvert.SerializeObject(new
-                    {
-                        _dijkstra.N,
-                        _dijkstra.M,
-                        _dijkstra.Map,
-                        _dijkstra.Start,
-                        _dijkstra.End
-                    }));
-                    Console.ForegroundColor = ConsoleColor.DarkGreen;
-                    Console.WriteLine("Файл записан");
+                if (model != null)
+                {
+                    var new_grid = new Grid(model);
+                    var grid_matrix = new_grid.generate_grid();
+                    _dijkstra = new Algoritms(grid_matrix, new Cell(model.start_node), new Cell(model.end_node));
+                }
+                Console.WriteLine("!Read successfuly\n");
+                break;
+            case "3":
+                // определяем размерности матрицы
+                FillGraph.InputRangeMap(out width, out height, out grid);
+                // определяем процент заполнения стен
+                FillGraph.InputPercentWallMap(out var p);
+                var rnd = new Random();
+                var w = rnd.Next(0, width * height * p / 100);
+                grid = new bool[width, height];
+                // случайно заполнение стенами карты
+                for (int i = 0; i < w; i++)
+                {
+                    var _i = rnd.Next(0, width);
+                    var _j = rnd.Next(0, height);
+                    grid[_i, _j] = true;
+                }
+                Console.WriteLine($"Размеры карты: {width} на {height}");
+                FillGraph.DrawGrid(grid);
+                // HelpInput.InputStartEnd(out  start, out end, width, height);
+                //_dijkstra = new GeneralDijkstra(map, start, end);
+                break;
+            case "save":
+                if (_dijkstra.EmptyFlag)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.WriteLine("Сначала введите данные!");
                     Console.ResetColor();
                     break;
-                // case "cls":
-                //    Console.Clear();
-                //    break;
-                case "exit":
-                    Console.Clear();
-                    break;
-            }
+                }
+                Console.Write("Введите название файла: ");
+                var fName = Console.ReadLine();
+                File.WriteAllText(@"..\..\..\Data\JsonFiles" + fName, JsonConvert.SerializeObject(new
+                {
+                    _dijkstra.width,
+                    _dijkstra.height,
+                    _dijkstra.GridMatrix,
+                    _dijkstra.StartPos,
+                    _dijkstra.EndPos
+                }));
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine("Файл записан");
+                Console.ResetColor();
+                break;
+            // case "cls":
+            //    Console.Clear();
+            //    break;
+            case "exit":
+                Console.Clear();
+                break;
         }
+
+
+
+
     }
 
     // метод выполнения решения двумя алгоритмами
-    public static void ExecuteProgram()
+    public static void FindSolution()
     {
-        if (_dijkstra.IsEmptyMap)
+        if (_dijkstra.EmptyFlag)
         {
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine("Сначала введите данные!");
@@ -142,10 +183,10 @@ public static class Menu
             switch (k)
             {
                 case "1":
-                    _dijkstra.AlgorithmAStar();
+                    _dijkstra.AStarAlgo();
                     break;
                 case "2":
-                    _dijkstra.AlgorithmDijkstra();
+                    _dijkstra.DijkstraAlgo();
                     break;
                 case "3":
                     WriteInFile();
@@ -182,7 +223,7 @@ public static class Menu
                 case "1":
                     // вводим имя файла
                     FillGraph.InputNameFile(out path);
-                    _dijkstra.AlgorithmAStar();
+                    _dijkstra.AStarAlgo();
                     File.WriteAllText(path, bufferString);
                     Console.ForegroundColor = ConsoleColor.DarkGreen;
                     Console.WriteLine("Файл записан");
@@ -190,7 +231,7 @@ public static class Menu
                     break;
                 case "2":
                     FillGraph.InputNameFile(out path);
-                    _dijkstra.AlgorithmDijkstra();
+                    _dijkstra.DijkstraAlgo();
                     File.WriteAllText(path, bufferString);
                     Console.ForegroundColor = ConsoleColor.DarkGreen;
                     Console.WriteLine("Файл записан");

@@ -2,66 +2,61 @@
 
 public class Algoritms
 {
-    private readonly bool[,] _map;
-
-    private readonly Cell _start;
-
-    private readonly Cell _end;
-
+    private readonly bool[,] _grid;
+    private int _iter = 0;
+    private readonly Cell _start_loc;
+    private readonly Cell _end_loc;
     private Cell? _path;
-
-    private int _step = 0;
 
     public Action<string>? Action;
 
     public Cell? Path => _path;
 
-    public bool[,] Map => _map;
-    public int N => _map.GetLength(0);
-    public int M => _map.GetLength(1);
-    public Cell Start => _start;
-    public Cell End => _end;
-
-    public bool IsEmptyMap => _map.GetLength(0) == 0 || _map.GetLength(1) == 0;
+    public bool[,] GridMatrix => _grid;
+    public int width => _grid.GetLength(0);
+    public int height => _grid.GetLength(1);
+    public Cell StartPos => _start_loc;
+    public Cell EndPos => _end_loc;
+    public bool EmptyFlag => _grid.GetLength(0) == 0 || _grid.GetLength(1) == 0;
 
     public Algoritms()
     {
-        _map = new bool[,] { };
-        _start = new Cell();
-        _end = new Cell();
+        _grid = new bool[,] { };
+        _start_loc = new Cell();
+        _end_loc = new Cell();
         _path = null;
         Action = Console.Write;
-        _step = 0;
+        _iter = 0;
     }
 
-    public Algoritms(bool[,] map, Cell start, Cell end)
+    public Algoritms(bool[,] grid, Cell start_pos, Cell end_pos)
     {
-        if (map.GetLength(0) == 0 || map.GetLength(1) == 0)
+        if (grid.GetLength(0) == 0 || grid.GetLength(1) == 0)
             throw new IndexOutOfRangeException("Карта пуста");
-        if (start.X < 0 || start.Y < 0 || start.X >= map.GetLength(0) || start.Y >= map.GetLength(1))
+        if (start_pos.X < 0 || start_pos.Y < 0 || start_pos.X >= grid.GetLength(0) || start_pos.Y >= grid.GetLength(1))
             throw new IndexOutOfRangeException("Стартовая точка лежит вне диапазонах карты");
 
-        if (end.X < 0 || end.Y < 0 || end.X >= map.GetLength(0) || end.Y >= map.GetLength(1))
+        if (end_pos.X < 0 || end_pos.Y < 0 || end_pos.X >= grid.GetLength(0) || end_pos.Y >= grid.GetLength(1))
             throw new IndexOutOfRangeException("Конечная точка лежит вне диапазонах карты");
 
-        if (start.X == end.X && start.Y == end.Y)
+        if (start_pos.X == end_pos.X && start_pos.Y == end_pos.Y)
             throw new Exception("Стартовая и конечная точки совпадают");
 
-        _map = new bool[map.GetLength(0), map.GetLength(1)];
-        for (int i = 0; i < map.GetLength(0); i++)
+        _grid = new bool[grid.GetLength(0), grid.GetLength(1)];
+        for (int i = 0; i < grid.GetLength(0); i++)
         {
-            for (int j = 0; j < map.GetLength(1); j++)
+            for (int j = 0; j < grid.GetLength(1); j++)
             {
-                _map[i, j] = map[i, j];
+                _grid[i, j] = grid[i, j];
             }
         }
-        _start = start;
-        _end = end;
+        _start_loc = start_pos;
+        _end_loc = end_pos;
 
-        _step = 0;
+        _iter = 0;
 
-        _map[start.X, start.Y] = false;
-        _map[end.X, end.Y] = false;
+        _grid[start_pos.X, start_pos.Y] = false;
+        _grid[end_pos.X, end_pos.Y] = false;
 
         _path = null;
         Action = Console.Write;
@@ -69,13 +64,13 @@ public class Algoritms
 
     public void ResetAction() => Action = Console.Write;
 
-    public void AlgorithmAStar()
+    public void AStarAlgo()
     {
         FindPath(SortByF);
         WriteSolving();
     }
 
-    public void AlgorithmDijkstra()
+    public void DijkstraAlgo()
     {
         FindPath(SortByG);
         WriteSolving();
@@ -84,16 +79,16 @@ public class Algoritms
     // основной путь нахождения пути
     private void FindPath(Func<Cell, int> selector)
     {
-        _step = 0;
-        var open = new List<Cell> { _start };
+        _iter = 0;
+        var open = new List<Cell> { _start_loc };
         var close = new List<Cell>();
 
         while (open.Count > 0)
         {
-            _step++;
+            _iter++;
             var curNode = open.MinBy(selector);
 
-            if (curNode.X == _end.X && curNode.Y == _end.Y)
+            if (curNode.X == _end_loc.X && curNode.Y == _end_loc.Y)
             {
                 _path = curNode;
                 return;
@@ -111,7 +106,7 @@ public class Algoritms
 
                 if (openNode == null)
                 {
-                    neighbour.GetH = (Math.Abs(_end.X - neighbour.X) + Math.Abs(_end.Y - neighbour.Y)) * 10;
+                    neighbour.GetH = (Math.Abs(_end_loc.X - neighbour.X) + Math.Abs(_end_loc.Y - neighbour.Y)) * 10;
                     open.Add(neighbour);
                 }
                 else
@@ -130,8 +125,8 @@ public class Algoritms
     // вспомогательный метод для нахождения пути
     private List<Cell> GetNeighbours(Cell cur)
     {
-        var rows = _map.GetLength(0);
-        var cols = _map.GetLength(1);
+        var rows = _grid.GetLength(0);
+        var cols = _grid.GetLength(1);
 
         var nodes = new List<Cell>
         {
@@ -148,7 +143,7 @@ public class Algoritms
         for (var i = 0; i < nodes.Count; i++)
         {
             if (nodes[i].X < 0 || nodes[i].X >= rows || nodes[i].Y < 0 || nodes[i].Y >= cols ||
-                _map[nodes[i].X, nodes[i].Y])
+                _grid[nodes[i].X, nodes[i].Y])
                 nodes.RemoveAt(i--);
         }
 
@@ -172,20 +167,20 @@ public class Algoritms
         }
         else
         {
-            Action?.Invoke($"Количество итераций: {_step}\n" + $"Число ячеек: {_path.CountParent + 1}\n");
+            Action?.Invoke($"Количество итераций: {_iter}\n" + $"Число ячеек: {_path.CountParent + 1}\n");
             Action?.Invoke($"Вес пути: {_path.GetF}\n");
 
             _path = _path.Parent;
 
-            while (_path.X != _start.X || _path.Y != _start.Y)
+            while (_path.X != _start_loc.X || _path.Y != _start_loc.Y)
             {
                 listNode.Add(_path);
                 _path = _path.Parent;
             }
         }
 
-        var maxLenCol = _map.GetLength(1).ToString().Length + 1;
-        var maxLenRow = _map.GetLength(0).ToString().Length + 1;
+        var maxLenCol = _grid.GetLength(1).ToString().Length + 1;
+        var maxLenRow = _grid.GetLength(0).ToString().Length + 1;
 
         if (maxLenCol == 1)
             maxLenCol++;
@@ -194,27 +189,27 @@ public class Algoritms
 
         Action?.Invoke(" ".PadRight(maxLenRow));
         Console.ForegroundColor = ConsoleColor.Blue;
-        for (int i = 0; i < _map.GetLength(1); i++)
+        for (int i = 0; i < _grid.GetLength(1); i++)
         {
             Action?.Invoke($"{i}".PadRight(maxLenCol));
         }
         Console.ResetColor();
         Action?.Invoke("\n");
-        for (int i = 0; i < _map.GetLength(0); i++)
+        for (int i = 0; i < _grid.GetLength(0); i++)
         {
             Console.ForegroundColor = ConsoleColor.Blue;
             Action?.Invoke($"{i}".PadRight(maxLenRow));
-            for (int j = 0; j < _map.GetLength(1); j++)
+            for (int j = 0; j < _grid.GetLength(1); j++)
             {
                 Console.ResetColor();
                 var cell = listNode.FirstOrDefault(x => x.X == i && x.Y == j);
-                if (i == _start.X && j == _start.Y)
+                if (i == _start_loc.X && j == _start_loc.Y)
                 {
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
                     Action?.Invoke("s".PadRight(maxLenCol));
                     continue;
                 }
-                if (i == _end.X && j == _end.Y)
+                if (i == _end_loc.X && j == _end_loc.Y)
                 {
                     Console.ForegroundColor = ConsoleColor.DarkBlue;
                     Action?.Invoke("e".PadRight(maxLenCol));
@@ -227,7 +222,7 @@ public class Algoritms
                     listNode.Remove(cell);
                     continue;
                 }
-                Action?.Invoke(_map[i, j] ? "[]".PadRight(maxLenCol) : "0".PadRight(maxLenCol));
+                Action?.Invoke(_grid[i, j] ? "[]".PadRight(maxLenCol) : "0".PadRight(maxLenCol));
             }
             Action?.Invoke("\n");
         }
