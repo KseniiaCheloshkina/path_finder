@@ -119,4 +119,42 @@ public class LoadTesting
         return record_time;
     }
 
+    // довинтервалы считаем для 2х алгоритмов
+    public static Dictionary<int, Dictionary<string, int>> GetStatsForCI(int n_repeats)
+    {
+        int walls_percent = 20;
+        int width = 200;
+        int height = 200;
+        bool[,] grid;
+        int[][] walls;
+        int[] start_pos = { 0, 0 };
+        int[] end_pos = { width - 1, width - 1 };
+        Dictionary<int, Dictionary<string, int>> record_time = new Dictionary<int, Dictionary<string, int>>();
+        for (int i = 0; i < n_repeats; i ++)
+        {           
+            // generate grid
+            GenerateGridByParams(out grid, out walls, width, height, walls_percent);
+            // save dataset
+            var algoritm = new Algoritms(walls, grid, new Cell(start_pos), new Cell(end_pos));
+            string fName = Convert.ToString(i);
+            File.WriteAllText(@"..\..\..\data\load_testing\ci_" + fName + ".json", JsonConvert.SerializeObject(new
+            {
+                algoritm.grid_size,
+                algoritm.walls,
+                algoritm.start_node,
+                algoritm.end_node
+            }));
+            // run 2 algos
+            int time_in_ms_astar = GenerateSolution(grid, walls, "AStar");
+            int time_in_ms_dijkstra = GenerateSolution(grid, walls, "Dijkstra");
+            Dictionary<string, int> cur_res = new Dictionary<string, int> {
+                {"AStar", time_in_ms_astar },
+                {"Dijkstra", time_in_ms_dijkstra}
+             };
+            record_time.Add(i, cur_res);
+            Console.WriteLine(i);
+        }
+        return record_time;
+    }
+
 }

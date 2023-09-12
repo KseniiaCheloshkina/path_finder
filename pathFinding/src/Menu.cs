@@ -233,7 +233,20 @@ public static class Menu
         //File.WriteAllText(@"..\..\..\data\results\change_percent.json", JsonConvert.SerializeObject(results));
 
         // run with different grid size
-        Dictionary<int, Dictionary<string, int>> results = LoadTesting.ChangeGridSize();
-        File.WriteAllText(@"..\..\..\data\results\change_width.json", JsonConvert.SerializeObject(results));
+        //Dictionary<int, Dictionary<string, int>> results = LoadTesting.ChangeGridSize();
+        //File.WriteAllText(@"..\..\..\data\results\change_width.json", JsonConvert.SerializeObject(results));
+
+        // run 30 repeats with tha same parameters to estimate latency of 2 algos
+        //Dictionary<int, Dictionary<string, int>> results = LoadTesting.GetStatsForCI(30);
+        //File.WriteAllText(@"..\..\..\data\results\ci_repeats.json", JsonConvert.SerializeObject(results));
+
+        // simple one run
+        int walls_percent = 20;
+        int width = 200;
+        int height = 200;
+        bool[,] grid;
+        int[][] walls;
+        LoadTesting.GenerateGridByParams(out grid, out walls, width, height, walls_percent);
+        int time_in_ms_astar = LoadTesting.GenerateSolution(grid, walls, "AStar");
     }
 }
