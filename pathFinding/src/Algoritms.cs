@@ -40,6 +40,11 @@ public class Algoritms
         _iter = 0;
     }
 
+    public Algoritms(Griq grid, Cell start_pos, Cell end_pos)
+    {
+        Algoritms(grid.walls, grid.matrix, start_pos, end_pos);
+    }
+
     public Algoritms(int[,] input_walls, bool[,] grid, Cell start_pos, Cell end_pos)
     {
         // Grid validation
