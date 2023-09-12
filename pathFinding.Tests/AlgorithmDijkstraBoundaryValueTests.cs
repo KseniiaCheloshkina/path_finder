@@ -4,23 +4,25 @@ namespace PathFinding.Tests;
 
 public class AlgorithmDijkstraBoundaryValueTests
 {
-    private Algoritms _algoritm;
+    private Algoritms algo;
     private string _buffer;
 
     private void Setup(Cell start, Cell end)
     {
         _buffer = string.Empty;
-        var map = new bool[,]
-        {
-            { false, false, false },
-            { true, true, false },
-            { false, false, true }
-        };
-        _algoritm = new Algoritms(map, start, end)
+
+            // { false, false, false },
+            // { true, true, false },
+            // { false, false, true }
+        
+        int[,] walls = {{0,1},{1,1},{2,2}};
+        var grid = new Grid(3,3,walls);
+
+        algo = new Algoritms(grid, start, end)
         {
             Action = txt => { _buffer += txt; }
         };
-        _algoritm.AlgoSearch(_algoritm.Type["Dijkstra"]);
+        algo.AlgoSearch(algo.Type["Dijkstra"]);
     }
 
     [Test]

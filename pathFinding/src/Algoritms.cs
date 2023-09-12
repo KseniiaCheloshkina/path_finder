@@ -1,4 +1,6 @@
-﻿namespace pathFinding.src;
+﻿using Spectre.Console;
+
+namespace pathFinding.src;
 
 
 public class Algoritms
@@ -211,6 +213,7 @@ public class Algoritms
 
         if (_path == null)
         {
+            AnsiConsole.MarkupLine("[maroon]You have not entered data![/]");
             Action?.Invoke("Path not found!\n");
         }
         else
@@ -270,7 +273,7 @@ public class Algoritms
                     listNode.Remove(cell);
                     continue;
                 }
-                Action?.Invoke(_grid[i, j] ? "X".PadRight(maxLenCol) : "0".PadRight(maxLenCol));
+                Action?.Invoke(_grid[i, j] ? "X".PadRight(maxLenCol) : ".".PadRight(maxLenCol));
             }
             Action?.Invoke("\n");
         }

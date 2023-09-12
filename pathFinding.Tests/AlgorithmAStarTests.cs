@@ -5,27 +5,21 @@ namespace PathFinding.Tests;
 public class AlgorithmAStarTests
 {
     private Algoritms algo;
-    private string _buffer;
+    private string result;
     
-    private void Setup( , int[,] walls, Cell start, Cell end)
+    private void Setup(Grid grid, Cell start, Cell end)
     {
-        _buffer = string.Empty;
-        int[,] walls = {{ 0, 1 },{ 2, 4}};
-        var grid = Grid.static_generate_grid(5,5,walls);
-        algo = new Algoritms(walls, grid, start, end);
+        result = string.Empty;
+        algo = new Algoritms(grid, start, end);
         algo.AlgoSearch(algo.Type["AStar"]);
     }
 
     [Test]
     public void Correct_Map_And_Start_And_End_Path_Found()
     {
-        // 
-        var map = new bool[,]
-        {
-            { false, false, false },
-            { true, true, false },
-            { false, false, true }
-        };
+        int[,] walls = {{0,1},{1,1},{2,2}};
+        var grid = new Grid(3,3,walls);
+
         var start = new Cell(0, 0);
         var end = new Cell(2, 0);
         var expect = "Количество итераций: 5\n" +
@@ -38,22 +32,22 @@ public class AlgorithmAStarTests
                      "s - start\n" +
                      "e - end\n";
         // act
-        Setup(map, start, end);
+        Setup(grid, start, end);
         
         // assert
-        Assert.AreEqual(expect, _buffer);
+        Assert.AreEqual(expect, result);
     }
     
     // корреткные данные, путь не найден
     [Test]
     public void Correct_Map_And_Start_And_End_Path_Not_Found()
     {
-        var map = new bool[,]
-        {
-            { false, false, false },
-            { true, true, true },
-            { false, false, true }
-        };
+            // { false, false, false },
+            // { true, true, true },
+            // { false, false, true }
+        int[,] walls = {{0,1},{1,1},{2,1},{2,2}};
+        var grid = new Grid(3,3,walls);
+
         var start = new Cell(0, 0);
         var end = new Cell(2, 0);
         var expect = "Путь не найден!\n" +
@@ -64,41 +58,43 @@ public class AlgorithmAStarTests
                      "s - start\n" +
                      "e - end\n";
 
-        Setup(map, start, end);
+        Setup(grid, start, end);
         
-        Assert.AreEqual(expect, _buffer);
+        Assert.AreEqual(expect, result);
     }
     
     // корреткные данные, стартовая и целевая точки - соседи
     [Test]
     public void Correct_Map_And_Start_Neighbouring_End()
     {
-        var map = new bool[,]
-        {
-            { false, false, false },
-            { true, true, false },
-            { false, false, true }
-        };
+            // { false, false, false },
+            // { true, true, false },
+            // { false, false, true }
+
+        int[,] walls = {{0,1},{1,1},{2,1},{2,2}};
+        var grid = new Grid(3,3,walls);
+
         var start = new Cell(0, 0);
-        var end = new Cell(0, 1);
+        var end = new Cell(1, 0);
         
-        Setup(map, start, end);
+        Setup(grid, start, end);
     }
     
     // некорреткные данные, стартовая и целевая точки равны
     [Test]
     public void Correct_Map_And_Start_Equal_End()
     {
-        var map = new bool[,]
-        {
-            { false, false, false },
-            { true, true, false },
-            { false, false, true }
-        };
+            // { false, false, false },
+            // { true, true, false },
+            // { false, false, true }
+
+        int[,] walls = {{0,1},{1,1},{2,2}};
+        var grid = new Grid(3,3,walls);
+
         var start = new Cell(0, 0);
         var end = new Cell(0, 0);
         
-        var exception = Assert.Throws<Exception>(() => new Algoritms(map, start, end));
+        var exception = Assert.Throws<Exception>(() => new Algoritms(grid, start, end));
         Assert.AreEqual("Стартовая и конечная точки совпадают", exception.Message);
     }
     
@@ -106,11 +102,12 @@ public class AlgorithmAStarTests
     [Test]
     public void Map_Is_Empty()
     {
-        var map = new bool[,] { };
+        // var map = new bool[,] { };
+        var grid = new Grid();
         var start = new Cell(0, 0);
         var end = new Cell(2, 0);
         
-        var exception = Assert.Throws<IndexOutOfRangeException>(() => new Algoritms(map, start, end));
+        var exception = Assert.Throws<IndexOutOfRangeException>(() => new Algoritms(grid, start, end));
         Assert.AreEqual("Карта пуста", exception.Message);
     }
     
@@ -118,16 +115,17 @@ public class AlgorithmAStarTests
     [Test]
     public void Correct_Map_And_Incorrect_Start()
     {
-        var map = new bool[,]
-        {
-            { false, false, false },
-            { true, true, false },
-            { false, false, true }
-        };
+            // { false, false, false },
+            // { true, true, false },
+            // { false, false, true }
+        
+        int[,] walls = {{0,1},{1,1},{2,2}};
+        var grid = new Grid(3,3,walls);
+
         var start = new Cell(0, 3);
         var end = new Cell(2, 0);
         
-        var exception = Assert.Throws<IndexOutOfRangeException>(() => new Algoritms(map, start, end));
+        var exception = Assert.Throws<IndexOutOfRangeException>(() => new Algoritms(grid, start, end));
         Assert.AreEqual("Стартовая точка лежит вне диапазонах карты", exception.Message);
     }
     
@@ -135,16 +133,17 @@ public class AlgorithmAStarTests
     [Test]
     public void Correct_Map_And_Incorrect_End()
     {
-        var map = new bool[,]
-        {
-            { false, false, false },
-            { true, true, false },
-            { false, false, true }
-        };
+            // { false, false, false },
+            // { true, true, false },
+            // { false, false, true }
+
+        int[,] walls = {{0,1},{1,1},{2,2}};
+        var grid = new Grid(3,3,walls);
+        
         var start = new Cell(0, 0);
         var end = new Cell(2, 3);
         
-        var exception = Assert.Throws<IndexOutOfRangeException>(() => new Algoritms(map, start, end));
+        var exception = Assert.Throws<IndexOutOfRangeException>(() => new Algoritms(grid, start, end));
         Assert.AreEqual("Конечная точка лежит вне диапазонах карты", exception.Message);
     }
 }

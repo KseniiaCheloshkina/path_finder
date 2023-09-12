@@ -18,7 +18,7 @@ public class Grid
         this.walls = grid_params.walls;
         this.width = grid_params.grid_size[0];
         this.height = grid_params.grid_size[1];
-
+        generate_grid();
     }
 
     public Grid(int width, int height, int [,] walls)
@@ -33,16 +33,21 @@ public class Grid
         }
     }
 
+    public Grid()
+    {
+    }
+
+
     public bool[,] generate_grid()
     {
-        matrix = new bool[width, height];
+        this.matrix = new bool[width, height];
 
         // set walls
         for (int i = 0; i < walls.GetLength(0); i++)
         {
-            matrix[walls[i,0],walls[i,1]] = true;
+            this.matrix[walls[i,0],walls[i,1]] = true;
         }
-        return matrix;
+        return this.matrix;
     }
 
     public static bool[,] static_generate_grid(int width, int height, int[,] walls)

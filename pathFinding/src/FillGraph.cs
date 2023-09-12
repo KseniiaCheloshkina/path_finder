@@ -107,7 +107,7 @@ public static class FillGraph
             Console.ResetColor();
             for (int j = 0; j < map.GetLength(1); j++)
             {
-                Console.Write(map[i, j] ? "X".PadRight(maxLenCol) : "0".PadRight(maxLenCol));
+                Console.Write(map[i, j] ? "X".PadRight(maxLenCol) : ".".PadRight(maxLenCol));
             }
             Console.WriteLine();
         }
@@ -121,7 +121,7 @@ public static class FillGraph
         while (true)
         {
             Console.WriteLine("Enter file name:");
-            path = @"..\..\..\data\results\" + Console.ReadLine();
+            path = Menu.FilePath("results", Console.ReadLine());
             var fileInfo = new FileInfo(path);
             if (fileInfo.Extension == ".txt")
                 break;

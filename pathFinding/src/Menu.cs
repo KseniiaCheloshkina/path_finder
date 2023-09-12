@@ -7,6 +7,16 @@ public static class Menu
 {
     private static Algoritms algoritm = new Algoritms();
 
+    public static string FilePath(string file) {
+        string dataFolder = Path.Combine("Data");
+        return Path.Combine(dataFolder,file);
+    }
+
+    public static string FilePath(string folder, string file) {
+        string dataFolder = Path.Combine("Data");
+        return Path.Combine(dataFolder, folder, file);
+    }
+
     public static void MainMenu()
     {
         var highlightStyle = new Style().Foreground(Color.Purple);
@@ -22,7 +32,7 @@ public static class Menu
                     "Load testing",
                     "Exit"
                 }));
-
+        
         switch (operation)
         {
             case "Set data":
@@ -32,7 +42,7 @@ public static class Menu
                 FindSolution();
                 break;
             case "Help":
-                Console.WriteLine(File.ReadAllText(@"..\..\..\Data\Help.txt"));
+                Console.WriteLine(File.ReadAllText(FilePath("Help.txt")));
                 MainMenu();
                 break;
             case "Load testing":
@@ -82,7 +92,7 @@ public static class Menu
 
             case "Read from file":
  
-                string[] files = Directory.GetFiles(@"..\..\..\data\input_data\");
+                string[] files = Directory.GetFiles(FilePath("input_data"));
                 string[] filesWithBack = new List<string>(files) { "Back" }.ToArray();
                 var filename = AnsiConsole.Prompt(
                     new SelectionPrompt<string>()
@@ -112,7 +122,7 @@ public static class Menu
                 }
                 Console.Write("Insert name of file with extention (1.json): ");
                 var fName = Console.ReadLine();
-                File.WriteAllText(@"..\..\..\data\input_data\" + fName, JsonConvert.SerializeObject(new
+                File.WriteAllText(FilePath("input_data",fName), JsonConvert.SerializeObject(new
                 {
                     algoritm.grid_size,
                     algoritm.walls,
@@ -196,6 +206,7 @@ public static class Menu
                 // вводим имя файла
                 FillGraph.DefineFileName(out path);
                 algoritm.AlgoSearch(algoritm.Type["AStar"]);
+                AnsiConsole.Markup($"file is {path}\n");
                 File.WriteAllText(path, bufferString);
                 AnsiConsole.Markup("[darkgreen]File recorded[/]\n");
                 break;
