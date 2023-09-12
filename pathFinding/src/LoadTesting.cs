@@ -126,7 +126,7 @@ public class LoadTesting
         int width = 200;
         int height = 200;
         bool[,] grid;
-        int[][] walls;
+        int[,] walls;
         int[] start_pos = { 0, 0 };
         int[] end_pos = { width - 1, width - 1 };
         Dictionary<int, Dictionary<string, int>> record_time = new Dictionary<int, Dictionary<string, int>>();
@@ -137,7 +137,7 @@ public class LoadTesting
             // save dataset
             var algoritm = new Algoritms(walls, grid, new Cell(start_pos), new Cell(end_pos));
             string fName = Convert.ToString(i);
-            File.WriteAllText(@"..\..\..\data\load_testing\ci_" + fName + ".json", JsonConvert.SerializeObject(new
+            File.WriteAllText(Menu.FilePath("load_testing",$"ci_{fName}.json"), JsonConvert.SerializeObject(new
             {
                 algoritm.grid_size,
                 algoritm.walls,
