@@ -20,6 +20,7 @@ public static class Menu
                     "Find a solution",
                     "Help",
                     "Load testing",
+                    "Test",
                     "Exit"
                 }));
 
@@ -37,6 +38,12 @@ public static class Menu
                 break;
             case "Load testing":
                 RunLoadingTests();
+                MainMenu();
+                break;
+            case "Test":
+                int[,] walls = {{1,1},{2,2},{3,3}};
+                var grid = Grid.static_generate_grid(5,5,walls);
+                FillGraph.DrawGrid(grid);
                 MainMenu();
                 break;
         }

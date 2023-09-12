@@ -1,5 +1,4 @@
-﻿using PathFinding.Algorithms;
-using PathFinding.Models;
+﻿using pathFinding.src;
 
 namespace PathFinding.Tests;
 

@@ -17,7 +17,7 @@ public class Algoritms
     public int width => _grid.GetLength(0);
     public int height => _grid.GetLength(1);
     public int[] grid_size = new int[2];
-    public int[][] walls;
+    public int[,] walls;
     public Cell StartPos => _start_loc;
     public int[] start_node = new int[2];
     public Cell EndPos => _end_loc;
@@ -40,7 +40,12 @@ public class Algoritms
         _iter = 0;
     }
 
-    public Algoritms(int[][] input_walls, bool[,] grid, Cell start_pos, Cell end_pos)
+    public Algoritms(Griq grid, Cell start_pos, Cell end_pos)
+    {
+        Algoritms(grid.walls, grid.matrix, start_pos, end_pos);
+    }
+
+    public Algoritms(int[,] input_walls, bool[,] grid, Cell start_pos, Cell end_pos)
     {
         // Grid validation
         if (grid.GetLength(0) == 0 || grid.GetLength(1) == 0)

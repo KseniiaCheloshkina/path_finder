@@ -1,0 +1,4 @@
+pathFinding*/bin/**
+pathFinding*/obj/**
+.idea
+.vscode

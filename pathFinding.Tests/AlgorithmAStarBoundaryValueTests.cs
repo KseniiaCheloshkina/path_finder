@@ -10,16 +10,11 @@ public class AlgorithmAStarBoundaryValueTests
     private void Setup(Cell start, Cell end)
     {
         result = string.Empty;
-        var map = new bool[,]
-        {
-            { false, false, false },
-            { true, true, false },
-            { false, false, true }
-        };
-        algo = new Algoritms(map, start, end)
-        {
-            Action = txt => { result += txt; }
-        };
+        int width = 5;
+        int height = 5;
+        int[,] walls = {{ 0, 1 },{ 2, 4}};
+        Grid grid = new Grid(width,height,walls);
+        algo = new Algoritms(grid, start, end)
         algo.AlgoSearch(algo.Type["AStar"]);
     }
 
