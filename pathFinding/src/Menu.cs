@@ -44,6 +44,7 @@ public static class Menu
         var endCell = new Cell();
         var grid = new bool[,] { };
         int width, height;
+        int[][] walls;
 
         var highlightStyle = new Style().Foreground(Color.Purple);
         var operation = AnsiConsole.Prompt(
@@ -54,6 +55,7 @@ public static class Menu
                 .AddChoices(new[] {
                         "Insert in stdin",
                         "Read from file",
+                        "Save file",
                         "Back to Main"
                 }));
 
@@ -63,13 +65,13 @@ public static class Menu
             // input from stdin
             case "Insert in stdin":
                 FillGraph.GridCreation(out width, out height, out grid); // get input size
-                                                                         // TODO: add walls on the map in ShowMap
-                FillGraph.DefineWalls(grid); // create walls
+                // TODO: add walls on the map in ShowMap
+                FillGraph.DefineWalls(out walls, grid); // create walls
                 Console.WriteLine("Insert coordinates of start position in format x y");
                 FillGraph.InputPoint(out startCell, width, height);  // create start position
                 Console.WriteLine("Insert coordinates of end position in format x y");
                 FillGraph.InputPoint(out endCell, width, height); // create end position
-                algoritm = new Algoritms(grid, startCell, endCell);
+                algoritm = new Algoritms(walls, grid, startCell, endCell);
                 SetData();
                 break;
 
@@ -91,13 +93,31 @@ public static class Menu
                     {
                         var new_grid = new Grid(model);
                         var grid_matrix = new_grid.generate_grid();
-                        algoritm = new Algoritms(grid_matrix, new Cell(model.start_node), new Cell(model.end_node));
+                        algoritm = new Algoritms(model.walls, grid_matrix, new Cell(model.start_node), new Cell(model.end_node));
                     }
                     Console.WriteLine($"File loaded {filename} \n");
                 }
                 MainMenu();
                 break;
 
+            case "Save file":
+                if (algoritm.EmptyFlag)
+                {
+                    Console.WriteLine("No data found");
+                    break;
+                }
+                Console.Write("Insert name of file with extention (1.json): ");
+                var fName = Console.ReadLine();
+                File.WriteAllText(@"..\..\..\data\input_data\" + fName, JsonConvert.SerializeObject(new
+                {
+                    algoritm.grid_size,
+                    algoritm.walls,
+                    algoritm.start_node,
+                    algoritm.end_node
+                }));
+                Console.WriteLine("File is saved");
+                MainMenu();
+                break;
 
             case "Back to Main":
                 MainMenu();
@@ -170,13 +190,13 @@ public static class Menu
         {
             case "Algo AStar":
                 // вводим имя файла
-                FillGraph.InputNameFile(out path);
+                FillGraph.DefineFileName(out path);
                 algoritm.AlgoSearch(algoritm.Type["AStar"]);
                 File.WriteAllText(path, bufferString);
                 AnsiConsole.Markup("[darkgreen]File recorded[/]\n");
                 break;
             case "Algo Dijkstra":
-                FillGraph.InputNameFile(out path);
+                FillGraph.DefineFileName(out path);
                 algoritm.AlgoSearch(algoritm.Type["AStar"]);
                 File.WriteAllText(path, bufferString);
                 AnsiConsole.Markup("[darkgreen]The file was not written[/]\n");
