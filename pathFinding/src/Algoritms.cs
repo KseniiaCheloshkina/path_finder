@@ -1,5 +1,6 @@
 ﻿namespace pathFinding.src;
 
+
 public class Algoritms
 {
     private readonly bool[,] _grid;
@@ -15,9 +16,16 @@ public class Algoritms
     public bool[,] GridMatrix => _grid;
     public int width => _grid.GetLength(0);
     public int height => _grid.GetLength(1);
+
     public Cell StartPos => _start_loc;
     public Cell EndPos => _end_loc;
     public bool EmptyFlag => _grid.GetLength(0) == 0 || _grid.GetLength(1) == 0;
+
+    public Dictionary<string, string> Type = new Dictionary<string, string>()
+    {
+        { "Dijkstra", "distance_from_start"},
+        { "AStar", "final_distance"}
+    };
 
     public Algoritms()
     {
@@ -38,8 +46,8 @@ public class Algoritms
         if (start_pos.X == end_pos.X && start_pos.Y == end_pos.Y)
             throw new Exception("Start and end positions are the same");
 
-        out_of_range_condition_start = (0 <= start_pos.X && start_pos.X <= grid.GetLength(0)) && (0 <= start_pos.Y && start_pos.Y <= grid.GetLength(1))
-        out_of_range_condition_end = (0 <= end_pos.X && end_pos.X <= grid.GetLength(0)) && (0 <= end_pos.Y && end_pos.Y <= grid.GetLength(1))
+        var out_of_range_condition_start = (0 <= start_pos.X && start_pos.X <= grid.GetLength(0)) && (0 <= start_pos.Y && start_pos.Y <= grid.GetLength(1));
+        var out_of_range_condition_end = (0 <= end_pos.X && end_pos.X <= grid.GetLength(0)) && (0 <= end_pos.Y && end_pos.Y <= grid.GetLength(1));
 
         if (!out_of_range_condition_start || !out_of_range_condition_end)
             throw new IndexOutOfRangeException("Start and end positions should be inside a grid");
@@ -67,41 +75,37 @@ public class Algoritms
 
     public void ResetAction() => Action = Console.Write;
 
-    public void AStarAlgo()
+
+    public void AlgoSearch(string distance_type)
     {
-        FindPath(SortByF);
+        BuildTree(distance_type);
         WriteSolving();
+
     }
 
-    public void DijkstraAlgo()
-    {
-        FindPath(SortByG);
-        WriteSolving();
-    }
-
-    private static int SortByF(Cell node) => node.final_distance;
-    private static int SortByG(Cell node) => node.distance_from_start;
-
-    public int min_distance_cell(List<Cell> list_cells)
+    public Cell min_distance_cell(List<Cell> list_cells, string distance_type)
    {
-       int min_val = int.MaxValue;
-       Cell final_cell = Cell();
-
-       foreach (var cur_cell in list_cells)
-       {
-            if (cur_cell. < min_val){
-                min_val = cur_cell
-                final_cell = cur_cell
-                }
+        int min_val = int.MaxValue;
+        var final_cell = new Cell();
+        
+        foreach (var cur_cell in list_cells)
+        {
+            // получаем из ячейки нужный вид расстояния в зависимости от алгоритма
+            object dist_obj = cur_cell.GetType().GetProperty(distance_type).GetValue(cur_cell, null);
+            int dist_val = Convert.ToInt32(dist_obj); // конвертация в число
+            if (dist_val < min_val){
+                min_val = dist_val;
+                final_cell = cur_cell;
             }
-       return final_cell;
+        }
+        return final_cell;
    }
 
-    private void FindPath(Func<Cell, int> selector)
+    private void BuildTree(string distance_type)
     {
         _iter = 1;
         // set of cells to go to
-        var open_set = new List<Cell> { _start };
+        var open_set = new List<Cell> { _start_loc };
         // set of already passed cells
         var closed_set = new List<Cell>();
 
@@ -109,8 +113,7 @@ public class Algoritms
         while (open_set.Count > 0)
         {
             // get cell with min cum distance
-            //var curNode = open_set.OrderBy(selector);
-            var curNode = min_distance_cell(open_set);
+            Cell curNode = min_distance_cell(open_set, distance_type);
 
             // if we already found it
             if (curNode.X == _end_loc.X && curNode.Y == _end_loc.Y)
@@ -135,7 +138,7 @@ public class Algoritms
                 if (openNode == null)
                 {
                     // calc euclidean distance
-                    neighbour.distance_to_target = (Math.Sqrt(Math.Pow(_end_loc.X - neighbour.X, 2) + Math.Pow(_end_loc.Y - neighbour.Y, 2)) * 5;
+                    neighbour.distance_to_target = (Math.Sqrt(Math.Pow(_end_loc.X - neighbour.X, 2) + Math.Pow(_end_loc.Y - neighbour.Y, 2))) * 5.0;
                     open_set.Add(neighbour);
                 }
                 else

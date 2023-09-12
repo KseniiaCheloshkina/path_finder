@@ -139,7 +139,7 @@ public static class Menu
                 .PageSize(5)
                 .AddChoices(new[] {
                     "Algo AStar",
-                    "Algo Dikstra",
+                    "Algo Dijkstra",
                     "Save result to file",
                     "Back"
                 }));
@@ -147,11 +147,11 @@ public static class Menu
         switch (operation)
         {
             case "Algo AStar":
-                algoritm.AStarAlgo();
+                algoritm.AlgoSearch(algoritm.Type["AStar"]);
                 MainMenu();
                 break;
-            case "Algo Dikstra":
-                algoritm.DijkstraAlgo();
+            case "Algo Dijkstra":
+                algoritm.AlgoSearch(algoritm.Type["Dijkstra"]);
                 MainMenu();
                 break;
             case "Save result to file":
@@ -177,7 +177,7 @@ public static class Menu
                 .PageSize(5)
                 .AddChoices(new[] {
                     "Algo AStar",
-                    "Algo Dikstra",
+                    "Algo Dijkstra",
                     "Back"
                 }));
 
@@ -186,13 +186,13 @@ public static class Menu
             case "Algo AStar":
                 // вводим имя файла
                 FillGraph.InputNameFile(out path);
-                algoritm.AStarAlgo();
+                algoritm.AlgoSearch(algoritm.Type["AStar"]);
                 File.WriteAllText(path, bufferString);
                 AnsiConsole.Markup("[darkgreen]Файл записан[/]\n");
                 break;
-            case "Algo Dikstra":
+            case "Algo Dijkstra":
                 FillGraph.InputNameFile(out path);
-                algoritm.DijkstraAlgo();
+                algoritm.AlgoSearch(algoritm.Type["AStar"]);
                 File.WriteAllText(path, bufferString);
                 AnsiConsole.Markup("[darkgreen]Файл записан[/]\n");
                 break;
