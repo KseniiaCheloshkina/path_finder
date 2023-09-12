@@ -8,7 +8,8 @@ public class LoadTesting
     public static void GenerateGridByParams(out bool[,] grid,out int[][] walls, int width, int height, int walls_percent)
     {
         grid = new bool[width, height];
-        int num_walls = Convert.ToInt32(walls_percent / 100 * width * height);
+        double n_walls = walls_percent * width * height / 100;
+        int num_walls = Convert.ToInt32(n_walls);
         // generate coords and fill grid with walls
         var rnd = new Random();
         walls = new int[num_walls][];
