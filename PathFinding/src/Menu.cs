@@ -227,7 +227,7 @@ public static class Menu
     // load testing
     public static void RunLoadingTests()
     {
-        // run with different percantage of walls
+        // run with different percentage of walls
         //Dictionary<int, Dictionary<string, int>> results = LoadTesting.ChangeWallsPercent();
         // File.WriteAllText(FilePath("results","change_percent.json"), JsonConvert.SerializeObject(results));
 
@@ -235,17 +235,18 @@ public static class Menu
         //Dictionary<int, Dictionary<string, int>> results = LoadTesting.ChangeGridSize();
         //File.WriteAllText(FilePath("results","change_width.json"), JsonConvert.SerializeObject(results));
 
-        // run 30 repeats with tha same parameters to estimate latency of 2 algos
+        // run 30 repeats with the same parameters to estimate latency of 2 algos
         //Dictionary<int, Dictionary<string, int>> results = LoadTesting.GetStatsForCI(30);
         //File.WriteAllText(FilePath("results","ci_repeats.json"), JsonConvert.SerializeObject(results));
 
         // simple one run
-        int walls_percent = 20;
-        int width = 200;
-        int height = 200;
+        int walls_percent = 30;
+        int width = 600;
+        int height = 600;
         bool[,] grid;
         int[,] walls;
         LoadTesting.GenerateGridByParams(out grid, out walls, width, height, walls_percent);
         int time_in_ms_astar = LoadTesting.GenerateSolution(grid, walls, "AStar");
+        Console.WriteLine(Convert.ToString(Convert.ToInt16(time_in_ms_astar / 1000)) + " sec");
     }
 }
