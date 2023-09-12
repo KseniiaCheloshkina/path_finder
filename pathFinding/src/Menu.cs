@@ -19,7 +19,7 @@ public static class Menu
                     "Set data",
                     "Find a solution",
                     "Help",
-                    "Test",
+                    "Load testing",
                     "Exit"
                 }));
 
@@ -35,23 +35,21 @@ public static class Menu
                 Console.WriteLine(File.ReadAllText(@"..\..\..\Data\Help.txt"));
                 MainMenu();
                 break;
-            case "Test":
-                int[,] walls = {{1,1},{2,2},{3,3}};
-                var grid = Grid.static_generate_grid(5,5,walls);
-                FillGraph.DrawGrid(grid);
+            case "Load testing":
+                RunLoadingTests();
                 MainMenu();
                 break;
         }
     }
 
-    // метод ввода данных карты и стартовой и целевой точек
+    // define input grid and condiotions
     public static void SetData()
     {
         var startCell = new Cell();
         var endCell = new Cell();
         var grid = new bool[,] { };
         int width, height;
-        int[][] walls;
+        int[,] walls;
 
         var highlightStyle = new Style().Foreground(Color.Purple);
         var operation = AnsiConsole.Prompt(
@@ -66,14 +64,14 @@ public static class Menu
                         "Back to Main"
                 }));
 
-        
+
         switch (operation)
         {
             // input from stdin
             case "Insert in stdin":
                 FillGraph.GridCreation(out width, out height, out grid); // get input size
                 // TODO: add walls on the map in ShowMap
-                FillGraph.DefineWalls(out walls, grid); // create walls
+                walls = FillGraph.DefineWalls(grid); // create walls
                 Console.WriteLine("Insert coordinates of start position in format x y");
                 FillGraph.InputPoint(out startCell, width, height);  // create start position
                 Console.WriteLine("Insert coordinates of end position in format x y");
@@ -92,15 +90,14 @@ public static class Menu
                         .PageSize(10)
                         .HighlightStyle(highlightStyle)
                         .AddChoices(filesWithBack));
-                if (filename != "Back") 
+                if (filename != "Back")
                 {
                     var model = JsonConvert.DeserializeObject<JsonModel>(File.ReadAllText(filename));
 
                     if (model != null)
                     {
                         var new_grid = new Grid(model);
-                        var grid_matrix = new_grid.generate_grid();
-                        algoritm = new Algoritms(model.walls, grid_matrix, new Cell(model.start_node), new Cell(model.end_node));
+                        algoritm = new Algoritms(new_grid, new Cell(model.start_node), new Cell(model.end_node));
                     }
                     Console.WriteLine($"File loaded {filename} \n");
                 }
@@ -132,7 +129,7 @@ public static class Menu
         }
     }
 
-    // метод выполнения решения двумя алгоритмами
+    // solution
     public static void FindSolution()
     {
         if (algoritm.EmptyFlag)
@@ -173,7 +170,7 @@ public static class Menu
         }
     }
 
-    // метод записи решения в файл
+    // save into file
     private static void WriteInFile()
     {
         var path = string.Empty;
@@ -212,5 +209,22 @@ public static class Menu
         // сбрасываем запись в файл на вывод на экран
         algoritm.ResetAction();
         MainMenu();
+    }
+
+    // load testing
+    public static void RunLoadingTests()
+    {
+        //int width = 5;
+        //int height = 6;
+        //int walls_percent = 70;
+        //string algo_name = "AStar";
+        //bool[,] grid;
+        //int[][] walls;
+        //LoadTesting.GenerateGridByParams(out grid, out walls, width, height, walls_percent);
+        //int time_in_ms = LoadTesting.GenerateSolution(grid, walls, algo_name);
+        //Console.Write("Total execution time in ms: ");
+        //Console.WriteLine(time_in_ms);
+        // Dictionary<int, int> result = LoadTesting.ChangeWallsPercent("AStar");
+        // Console.WriteLine(result);
     }
 }

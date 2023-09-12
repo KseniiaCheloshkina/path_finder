@@ -3,10 +3,10 @@
 
 public class Algoritms
 {
-    private readonly bool[,] _grid;
+    private bool[,] _grid;
     private int _iter = 0;
-    private readonly Cell _start_loc;
-    private readonly Cell _end_loc;
+    private Cell _start_loc;
+    private Cell _end_loc;
     private Cell? _path;
 
     public Action<string>? Action;
@@ -40,14 +40,18 @@ public class Algoritms
         _iter = 0;
     }
 
-    public Algoritms(Griq grid, Cell start_pos, Cell end_pos)
+    public Algoritms(Grid grid, Cell start_pos, Cell end_pos)
     {
-        Algoritms(grid.walls, grid.matrix, start_pos, end_pos);
+        Init(grid.walls, grid.matrix, start_pos, end_pos);
     }
 
     public Algoritms(int[,] input_walls, bool[,] grid, Cell start_pos, Cell end_pos)
     {
-        // Grid validation
+        Init(input_walls, grid, start_pos, end_pos);
+    }
+
+    private void Init(int[,] input_walls, bool[,] grid, Cell start_pos, Cell end_pos) {
+                // Grid validation
         if (grid.GetLength(0) == 0 || grid.GetLength(1) == 0)
             throw new IndexOutOfRangeException("Grid should not be empty");
 
@@ -87,6 +91,7 @@ public class Algoritms
         _path = null;
         Action = Console.Write;
     }
+
 
     public void ResetAction() => Action = Console.Write;
 
