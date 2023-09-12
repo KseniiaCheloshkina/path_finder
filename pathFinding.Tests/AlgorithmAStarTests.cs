@@ -7,13 +7,12 @@ public class AlgorithmAStarTests
     private Algoritms algo;
     private string _buffer;
     
-    private void Setup(bool[,] map, Cell start, Cell end)
+    private void Setup( , int[,] walls, Cell start, Cell end)
     {
         _buffer = string.Empty;
-        algo = new Algoritms(map, start, end)
-        {
-            Action = txt => { _buffer += txt; }
-        };
+        int[,] walls = {{ 0, 1 },{ 2, 4}};
+        var grid = Grid.static_generate_grid(5,5,walls);
+        algo = new Algoritms(walls, grid, start, end);
         algo.AlgoSearch(algo.Type["AStar"]);
     }
 
