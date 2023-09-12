@@ -9,10 +9,12 @@ public static class Menu
 
     public static void MainMenu()
     {
+        var highlightStyle = new Style().Foreground(Color.Purple);
         var operation = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
                 .Title("Choose an operation?")
                 .PageSize(5)
+                .HighlightStyle(highlightStyle)
                 .AddChoices(new[] {
                     "Set data",
                     "Find a solution",
@@ -49,10 +51,12 @@ public static class Menu
         int width, height;
         int[][] walls;
 
+        var highlightStyle = new Style().Foreground(Color.Purple);
         var operation = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
                 .Title("Choose an input type?")
                 .PageSize(5)
+                .HighlightStyle(highlightStyle)
                 .AddChoices(new[] {
                         "Insert in stdin",
                         "Read from file",
@@ -66,28 +70,29 @@ public static class Menu
             // input from stdin
             case "Insert in stdin":
                 FillGraph.GridCreation(out width, out height, out grid); // get input size
-                                                                         // TODO: add walls on the map in ShowMap
+                // TODO: add walls on the map in ShowMap
                 FillGraph.DefineWalls(out walls, grid); // create walls
-                Console.WriteLine("Insert coordinates of start position in format `x y`");
+                Console.WriteLine("Insert coordinates of start position in format x y");
                 FillGraph.InputPoint(out startCell, width, height);  // create start position
-                Console.WriteLine("Insert coordinates of end position in format `x y`");
+                Console.WriteLine("Insert coordinates of end position in format x y");
                 FillGraph.InputPoint(out endCell, width, height); // create end position
                 algoritm = new Algoritms(walls, grid, startCell, endCell);
                 SetData();
                 break;
 
             case "Read from file":
+ 
                 string[] files = Directory.GetFiles(@"..\..\..\data\input_data\");
                 string[] filesWithBack = new List<string>(files) { "Back" }.ToArray();
                 var filename = AnsiConsole.Prompt(
                     new SelectionPrompt<string>()
                         .Title("Choose an input type?")
                         .PageSize(10)
+                        .HighlightStyle(highlightStyle)
                         .AddChoices(filesWithBack));
                 if (filename != "Back")
                 {
-                    var json_content = File.ReadAllText(filename);
-                    var model = JsonConvert.DeserializeObject<JsonModel>(json_content);
+                    var model = JsonConvert.DeserializeObject<JsonModel>(File.ReadAllText(filename));
 
                     if (model != null)
                     {
@@ -103,23 +108,19 @@ public static class Menu
             case "Save file":
                 if (algoritm.EmptyFlag)
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.WriteLine("Сначала введите данные!");
-                    Console.ResetColor();
+                    Console.WriteLine("No data found");
                     break;
                 }
-                Console.Write("Введите название файла: ");
+                Console.Write("Insert name of file with extention (1.json): ");
                 var fName = Console.ReadLine();
-                File.WriteAllText(@"..\..\..\Data\input_data\" + fName, JsonConvert.SerializeObject(new
+                File.WriteAllText(@"..\..\..\data\input_data\" + fName, JsonConvert.SerializeObject(new
                 {
                     algoritm.grid_size,
                     algoritm.walls,
                     algoritm.start_node,
                     algoritm.end_node
                 }));
-                Console.ForegroundColor = ConsoleColor.DarkGreen;
-                Console.WriteLine("Файл записан");
-                Console.ResetColor();
+                Console.WriteLine("File is saved");
                 MainMenu();
                 break;
 
@@ -134,15 +135,16 @@ public static class Menu
     {
         if (algoritm.EmptyFlag)
         {
-            AnsiConsole.Markup("[maroon]Сначала введите данные![/]\n");
+            AnsiConsole.Markup("[maroon]You have not entered data![/]\n");
             MainMenu();
             return;
         }
-
+        var highlightStyle = new Style().Foreground(Color.Purple);
         var operation = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
                 .Title("Choose an algoritm?")
                 .PageSize(5)
+                .HighlightStyle(highlightStyle)
                 .AddChoices(new[] {
                     "Algo AStar",
                     "Algo Dijkstra",
@@ -177,10 +179,12 @@ public static class Menu
         // меняем вывод результата на экран на запись результата в файл
         algoritm.Action = txt => { bufferString += txt; };
 
+        var highlightStyle = new Style().Foreground(Color.Purple);
         var operation = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
-                .Title("Какое решение записать:")
+                .Title("Which solution to write down:")
                 .PageSize(5)
+                .HighlightStyle(highlightStyle)
                 .AddChoices(new[] {
                     "Algo AStar",
                     "Algo Dijkstra",
@@ -191,16 +195,16 @@ public static class Menu
         {
             case "Algo AStar":
                 // вводим имя файла
-                FillGraph.InputNameFile(out path);
+                FillGraph.DefineFileName(out path);
                 algoritm.AlgoSearch(algoritm.Type["AStar"]);
                 File.WriteAllText(path, bufferString);
-                AnsiConsole.Markup("[darkgreen]Файл записан[/]\n");
+                AnsiConsole.Markup("[darkgreen]File recorded[/]\n");
                 break;
             case "Algo Dijkstra":
-                FillGraph.InputNameFile(out path);
+                FillGraph.DefineFileName(out path);
                 algoritm.AlgoSearch(algoritm.Type["AStar"]);
                 File.WriteAllText(path, bufferString);
-                AnsiConsole.Markup("[darkgreen]Файл записан[/]\n");
+                AnsiConsole.Markup("[darkgreen]The file was not written[/]\n");
                 break;
         }
         // сбрасываем запись в файл на вывод на экран
