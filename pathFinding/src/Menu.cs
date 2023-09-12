@@ -215,7 +215,15 @@ public static class Menu
     // load testing
     public static void RunLoadingTests()
     {
-        
-
+        int width = 5;
+        int height = 6;
+        int walls_percent = 70;
+        string algo_name = "AStar";
+        bool[,] grid;
+        int[][] walls;
+        LoadTesting.GenerateGridByParams(out grid, out walls, width, height, walls_percent);
+        int time_in_ms = LoadTesting.GenerateSolution(grid, walls, algo_name);
+        Console.Write("Total execution time in ms: ");
+        Console.WriteLine(time_in_ms);
     }
 }
