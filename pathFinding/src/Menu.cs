@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Reflection;
+using Newtonsoft.Json;
 using Spectre.Console;
 
 namespace pathFinding.src;
@@ -42,6 +43,7 @@ public static class Menu
         var endCell = new Cell();
         var grid = new bool[,] { };
         int width, height;
+        int[][] walls;
 
         var operation = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
@@ -61,12 +63,12 @@ public static class Menu
             case "Insert in stdin":
                 FillGraph.GridCreation(out width, out height, out grid); // get input size
                                                                          // TODO: add walls on the map in ShowMap
-                FillGraph.DefineWalls(grid); // create walls
+                FillGraph.DefineWalls(out walls, grid); // create walls
                 Console.WriteLine("Insert coordinates of start position in format `x y`");
                 FillGraph.InputPoint(out startCell, width, height);  // create start position
                 Console.WriteLine("Insert coordinates of end position in format `x y`");
                 FillGraph.InputPoint(out endCell, width, height); // create end position
-                algoritm = new Algoritms(grid, startCell, endCell);
+                algoritm = new Algoritms(walls, grid, startCell, endCell);
                 SetData();
                 break;
 
@@ -80,13 +82,14 @@ public static class Menu
                         .AddChoices(filesWithBack));
                 if (filename != "Back") 
                 {
-                    var model = JsonConvert.DeserializeObject<JsonModel>(File.ReadAllText(filename));
+                    var json_content = File.ReadAllText(filename);
+                    var model = JsonConvert.DeserializeObject<JsonModel>(json_content);
 
                     if (model != null)
                     {
                         var new_grid = new Grid(model);
                         var grid_matrix = new_grid.generate_grid();
-                        algoritm = new Algoritms(grid_matrix, new Cell(model.start_node), new Cell(model.end_node));
+                        algoritm = new Algoritms(model.walls, grid_matrix, new Cell(model.start_node), new Cell(model.end_node));
                     }
                     Console.WriteLine($"File loaded {filename} \n");
                 }
@@ -105,11 +108,10 @@ public static class Menu
                 var fName = Console.ReadLine();
                 File.WriteAllText(@"..\..\..\Data\input_data\" + fName, JsonConvert.SerializeObject(new
                 {
-                    algoritm.width,
-                    algoritm.height,
-                    algoritm.GridMatrix,
-                    algoritm.StartPos,
-                    algoritm.EndPos
+                    algoritm.grid_size,
+                    algoritm.walls,
+                    algoritm.start_node,
+                    algoritm.end_node
                 }));
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
                 Console.WriteLine("Файл записан");

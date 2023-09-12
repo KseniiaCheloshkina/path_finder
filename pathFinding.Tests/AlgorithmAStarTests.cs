@@ -17,7 +17,6 @@ public class AlgorithmAStarTests
         algo.AlgoSearch(algo.Type["AStar"]);
     }
 
-    // корреткные данные, путь найден
     [Test]
     public void Correct_Map_And_Start_And_End_Path_Found()
     {

@@ -4,7 +4,7 @@ namespace PathFinding.Tests;
 
 public class AlgorithmDijkstraBoundaryValueTests
 {
-    private Algoritms _dijkstra;
+    private Algoritms _algoritm;
     private string _buffer;
 
     private void Setup(Cell start, Cell end)
@@ -16,18 +16,18 @@ public class AlgorithmDijkstraBoundaryValueTests
             { true, true, false },
             { false, false, true }
         };
-        _dijkstra = new Algoritms(map, start, end)
+        _algoritm = new Algoritms(map, start, end)
         {
             Action = txt => { _buffer += txt; }
         };
-        _dijkstra.AlgorithmDijkstra();
+        _algoritm.AlgoSearch(_algoritm.Type["Dijkstra"]);
     }
 
     [Test]
     public void Check_Dijkstra_With_X_Of_Start_Node_Close_To_Up_Range()
     {
-        var start = new Node(0, 1);
-        var end = new Node(1, 1);
+        var start = new Cell(0, 1);
+        var end = new Cell(1, 1);
         
         var expect = "Количество итераций: 3\n" +
                      "Число ячеек: 2\n" +
@@ -46,8 +46,8 @@ public class AlgorithmDijkstraBoundaryValueTests
     [Test]
     public void Check_Dijkstra_With_Y_Of_Start_Node_Close_To_Left_Range()
     {
-        var start = new Node(1, 0);
-        var end = new Node(1, 1);
+        var start = new Cell(1, 0);
+        var end = new Cell(1, 1);
         
         var expect = "Количество итераций: 4\n" +
                      "Число ячеек: 2\n" +
@@ -66,8 +66,8 @@ public class AlgorithmDijkstraBoundaryValueTests
     [Test]
     public void Check_Dijkstra_With_X_Of_Start_Node_Close_To_Down_Range()
     {
-        var start = new Node(2, 1);
-        var end = new Node(1, 1);
+        var start = new Cell(2, 1);
+        var end = new Cell(1, 1);
         
         var expect = "Количество итераций: 3\n" +
                      "Число ячеек: 2\n" +
@@ -86,8 +86,8 @@ public class AlgorithmDijkstraBoundaryValueTests
     [Test]
     public void Check_Dijkstra_With_Y_Of_Start_Node_Close_To_Right_Range()
     {
-        var start = new Node(1, 2);
-        var end = new Node(1, 1);
+        var start = new Cell(1, 2);
+        var end = new Cell(1, 1);
         
         var expect = "Количество итераций: 2\n" +
                      "Число ячеек: 2\n" +
@@ -106,8 +106,8 @@ public class AlgorithmDijkstraBoundaryValueTests
     [Test]
     public void Check_Dijkstra_With_X_Of_End_Node_Close_To_Up_Range()
     {
-        var start = new Node(1, 1);
-        var end = new Node(0, 1);
+        var start = new Cell(1, 1);
+        var end = new Cell(0, 1);
         
         var expect = "Количество итераций: 2\n" +
                      "Число ячеек: 2\n" +
@@ -126,8 +126,8 @@ public class AlgorithmDijkstraBoundaryValueTests
     [Test]
     public void Check_Dijkstra_With_Y_Of_End_Node_Close_To_Left_Range()
     {
-        var start = new Node(1, 1);
-        var end = new Node(1, 0);
+        var start = new Cell(1, 1);
+        var end = new Cell(1, 0);
         
         var expect = "Количество итераций: 2\n" +
                      "Число ячеек: 2\n" +
@@ -146,8 +146,8 @@ public class AlgorithmDijkstraBoundaryValueTests
     [Test]
     public void Check_Dijkstra_With_X_Of_End_Node_Close_To_Down_Range()
     {
-        var start = new Node(1, 1);
-        var end = new Node(2, 1);
+        var start = new Cell(1, 1);
+        var end = new Cell(2, 1);
         
         var expect = "Количество итераций: 3\n" +
                      "Число ячеек: 2\n" +
@@ -166,8 +166,8 @@ public class AlgorithmDijkstraBoundaryValueTests
     [Test]
     public void Check_Dijkstra_With_Y_Of_End_Node_Close_To_Right_Range()
     {
-        var start = new Node(1, 1);
-        var end = new Node(1, 2);
+        var start = new Cell(1, 1);
+        var end = new Cell(1, 2);
         
         var expect = "Количество итераций: 4\n" +
                      "Число ячеек: 2\n" +
@@ -186,8 +186,8 @@ public class AlgorithmDijkstraBoundaryValueTests
     [Test]
     public void Check_Dijkstra_With_X_Of_Start_Node_Close_Out_Up_Range()
     {
-        var start = new Node(-1, 1);
-        var end = new Node(1, 2);
+        var start = new Cell(-1, 1);
+        var end = new Cell(1, 2);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => Setup(start, end));
         Assert.AreEqual("Стартовая точка лежит вне диапазонах карты", exception.Message);
@@ -196,8 +196,8 @@ public class AlgorithmDijkstraBoundaryValueTests
     [Test]
     public void Check_Dijkstra_With_Y_Of_Start_Node_Close_Out_Left_Range()
     {
-        var start = new Node(1, -1);
-        var end = new Node(1, 2);
+        var start = new Cell(1, -1);
+        var end = new Cell(1, 2);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => Setup(start, end));
         Assert.AreEqual("Стартовая точка лежит вне диапазонах карты", exception.Message);
@@ -206,8 +206,8 @@ public class AlgorithmDijkstraBoundaryValueTests
     [Test]
     public void Check_Dijkstra_With_X_Of_Start_Node_Close_Out_Down_Range()
     {
-        var start = new Node(3, 1);
-        var end = new Node(1, 2);
+        var start = new Cell(3, 1);
+        var end = new Cell(1, 2);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => Setup(start, end));
         Assert.AreEqual("Стартовая точка лежит вне диапазонах карты", exception.Message);
@@ -216,8 +216,8 @@ public class AlgorithmDijkstraBoundaryValueTests
     [Test]
     public void Check_Dijkstra_With_Y_Of_Start_Node_Close_Out_Right_Range()
     {
-        var start = new Node(1, 3);
-        var end = new Node(1, 2);
+        var start = new Cell(1, 3);
+        var end = new Cell(1, 2);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => Setup(start, end));
         Assert.AreEqual("Стартовая точка лежит вне диапазонах карты", exception.Message);
@@ -226,8 +226,8 @@ public class AlgorithmDijkstraBoundaryValueTests
     [Test]
     public void Check_Dijkstra_With_X_Of_End_Node_Close_Out_Up_Range()
     {
-        var start = new Node(1, 1);
-        var end = new Node(-1, 1);
+        var start = new Cell(1, 1);
+        var end = new Cell(-1, 1);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => Setup(start, end));
         Assert.AreEqual("Конечная точка лежит вне диапазонах карты", exception.Message);
@@ -236,8 +236,8 @@ public class AlgorithmDijkstraBoundaryValueTests
     [Test]
     public void Check_Dijkstra_With_Y_Of_End_Node_Close_Out_Left_Range()
     {
-        var start = new Node(1, 1);
-        var end = new Node(1, -1);
+        var start = new Cell(1, 1);
+        var end = new Cell(1, -1);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => Setup(start, end));
         Assert.AreEqual("Конечная точка лежит вне диапазонах карты", exception.Message);
@@ -246,8 +246,8 @@ public class AlgorithmDijkstraBoundaryValueTests
     [Test]
     public void Check_Dijkstra_With_X_Of_End_Node_Close_Out_Down_Range()
     {
-        var start = new Node(1, 1);
-        var end = new Node(3, 1);
+        var start = new Cell(1, 1);
+        var end = new Cell(3, 1);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => Setup(start, end));
         Assert.AreEqual("Конечная точка лежит вне диапазонах карты", exception.Message);
@@ -256,8 +256,8 @@ public class AlgorithmDijkstraBoundaryValueTests
     [Test]
     public void Check_Dijkstra_With_Y_Of_End_Node_Close_Out_Right_Range()
     {
-        var start = new Node(1, 1);
-        var end = new Node(1, 3);
+        var start = new Cell(1, 1);
+        var end = new Cell(1, 3);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => Setup(start, end));
         Assert.AreEqual("Конечная точка лежит вне диапазонах карты", exception.Message);

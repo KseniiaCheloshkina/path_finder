@@ -16,9 +16,12 @@ public class Algoritms
     public bool[,] GridMatrix => _grid;
     public int width => _grid.GetLength(0);
     public int height => _grid.GetLength(1);
-
+    public int[] grid_size = new int[2];
+    public int[][] walls;
     public Cell StartPos => _start_loc;
+    public int[] start_node = new int[2];
     public Cell EndPos => _end_loc;
+    public int[] end_node = new int[2];
     public bool EmptyFlag => _grid.GetLength(0) == 0 || _grid.GetLength(1) == 0;
 
     public Dictionary<string, string> Type = new Dictionary<string, string>()
@@ -37,9 +40,9 @@ public class Algoritms
         _iter = 0;
     }
 
-    public Algoritms(bool[,] grid, Cell start_pos, Cell end_pos)
+    public Algoritms(int[][] input_walls, bool[,] grid, Cell start_pos, Cell end_pos)
     {
-       // Grid validation
+        // Grid validation
         if (grid.GetLength(0) == 0 || grid.GetLength(1) == 0)
             throw new IndexOutOfRangeException("Grid should not be empty");
 
@@ -68,6 +71,13 @@ public class Algoritms
 
         _grid[start_pos.X, start_pos.Y] = false;
         _grid[end_pos.X, end_pos.Y] = false;
+
+        // for json
+        grid_size[0] = grid.GetLength(0);
+        grid_size[1] = grid.GetLength(1);
+        walls = input_walls;
+        start_node = new int[2] { start_pos.X, start_pos.Y };
+        end_node = new int[2] { end_pos.X, end_pos.Y};
 
         _path = null;
         Action = Console.Write;

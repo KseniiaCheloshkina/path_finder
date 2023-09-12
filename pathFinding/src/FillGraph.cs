@@ -54,7 +54,7 @@ public static class FillGraph
     }
 
     // Define walls on the map
-    public static void DefineWalls(bool[,] map)
+    public static void DefineWalls(out int[][] walls, bool[,] map)
     {
         // Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine("Input number of walls");
@@ -79,6 +79,7 @@ public static class FillGraph
             }
 
         }
+        walls = new int[num_walls][];
 
         for (int i = 0; i < num_walls; i++)
         {
@@ -87,6 +88,7 @@ public static class FillGraph
             // Console.ResetColor();
             InputPoint(out var node, map.GetLength(0), map.GetLength(1));
             map[node.X, node.Y] = true;
+            walls[i] = new int[] { node.X, node.Y };
         }
     }
 
@@ -111,7 +113,6 @@ public static class FillGraph
         }
 
         // create grid
-        // var map = new bool[,] { };
         map = new bool[width, height];
         DrawGrid(map);
     }
