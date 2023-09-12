@@ -19,6 +19,7 @@ public static class Menu
                     "Set data",
                     "Find a solution",
                     "Help",
+                    "Test",
                     "Exit"
                 }));
 
@@ -32,6 +33,12 @@ public static class Menu
                 break;
             case "Help":
                 Console.WriteLine(File.ReadAllText(@"..\..\..\Data\Help.txt"));
+                MainMenu();
+                break;
+            case "Test":
+                int[,] walls = {{1,1},{2,2},{3,3}};
+                var grid = Grid.static_generate_grid(5,5,walls);
+                FillGraph.DrawGrid(grid);
                 MainMenu();
                 break;
         }

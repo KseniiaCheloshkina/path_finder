@@ -10,13 +10,14 @@ public class AlgorithmAStarBoundaryValueTests
     private void Setup(Cell start, Cell end)
     {
         result = string.Empty;
-        var map = new bool[,]
+        int[,] walls =  
         {
-            { false, false, false },
-            { true, true, false },
-            { false, false, true }
+            { 0, 1 },
+            { 2, 4}
         };
-        algo = new Algoritms(map, start, end)
+
+        var grid = Grid.static_generate_grid(5,5,walls);
+        algo = new Algoritms(walls, grid, start, end)
         {
             Action = txt => { result += txt; }
         };

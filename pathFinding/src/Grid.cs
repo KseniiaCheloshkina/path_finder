@@ -1,3 +1,5 @@
+using Spectre.Console;
+
 namespace pathFinding.src;
 
 
@@ -21,6 +23,16 @@ public class Grid
         foreach (var wall in grid_params.walls)
         {
             grid_matrix[wall[0], wall[1]] = true;
+        }
+        return grid_matrix;
+    }
+
+    public static bool[,] static_generate_grid(int width, int height, int[,] walls)
+    {
+        bool[,] grid_matrix = new bool[width, height];
+        for (int i = 0; i < walls.GetLength(0); i++)
+        {
+            grid_matrix[walls[i,0],walls[i,1]] = true;
         }
         return grid_matrix;
     }
