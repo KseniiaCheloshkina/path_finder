@@ -9,14 +9,14 @@ public static class FillGraph
         while (true)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("Введите название файла:");
+            Console.WriteLine("Enter file name:");
             Console.ResetColor();
-            path = @"..\..\..\Data\TxtFiles\" + Console.ReadLine();
+            path = @"..\..\..\data\results\" + Console.ReadLine();
             var fileInfo = new FileInfo(path);
             if (fileInfo.Extension == ".txt")
                 break;
             Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.WriteLine("Файл должен иметь расширение .txt");
+            Console.WriteLine("The file must have the extension .txt");
             Console.ResetColor();
         }
     }
@@ -33,7 +33,7 @@ public static class FillGraph
             maxLenRow++;
 
         Console.Write(" ".PadRight(maxLenRow));
-        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
         for (int i = 0; i < map.GetLength(1); i++)
         {
             Console.Write($"{i}".PadRight(maxLenCol));
@@ -42,19 +42,19 @@ public static class FillGraph
         Console.WriteLine();
         for (int i = 0; i < map.GetLength(0); i++)
         {
-            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.Write($"{i}".PadRight(maxLenRow));
             Console.ResetColor();
             for (int j = 0; j < map.GetLength(1); j++)
             {
-                Console.Write(map[i, j] ? "[]".PadRight(maxLenCol) : "0".PadRight(maxLenCol));
+                Console.Write(map[i, j] ? "X".PadRight(maxLenCol) : "0".PadRight(maxLenCol));
             }
             Console.WriteLine();
         }
     }
 
     // Define walls on the map
-    public static void DefineWalls(out int[][] walls, bool[,] map)
+    public static void DefineWalls(bool[,] map)
     {
         // Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine("Input number of walls");
@@ -79,16 +79,14 @@ public static class FillGraph
             }
 
         }
-        walls = new int[num_walls][];
 
         for (int i = 0; i < num_walls; i++)
         {
             // Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine($"Insert coordinate of {i + 1} wall using the following format: `x y`");
+            Console.WriteLine($"Insert coordinate of {i + 1} wall using the following format: x y");
             // Console.ResetColor();
             InputPoint(out var node, map.GetLength(0), map.GetLength(1));
             map[node.X, node.Y] = true;
-            walls[i] = new int[] { node.X, node.Y };
         }
     }
 
@@ -107,12 +105,13 @@ public static class FillGraph
             if (tmp.Length != 2 || !int.TryParse(tmp[0], out width) || !int.TryParse(tmp[1], out height) || width < 2 || height < 2)
             {
                 // Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.WriteLine("You must specify 2 numbers in format `x y`. Both `x` and `y` should be not less than 2");
+                Console.WriteLine("You must specify 2 numbers in format x y. Both `x` and `y` should be not less than 2");
                 Console.ResetColor();
             }
         }
 
         // create grid
+        // var map = new bool[,] { };
         map = new bool[width, height];
         DrawGrid(map);
     }
@@ -129,7 +128,7 @@ public static class FillGraph
             if (input_str.Length != 2 || !int.TryParse(input_str[0], out loc[0]) || !int.TryParse(input_str[1], out loc[1]))
             {
                 // Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.WriteLine("You should insert two numbers in format `x y`");
+                Console.WriteLine("You should insert two numbers in format x y");
                 // Console.ResetColor();
                 loc[0] = -1;
                 loc[1] = -1;

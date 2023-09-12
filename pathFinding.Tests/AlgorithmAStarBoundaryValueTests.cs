@@ -1,33 +1,33 @@
-﻿using pathFinding.src;
+﻿using PathFinding;
 
 namespace PathFinding.Tests;
 
 public class AlgorithmAStarBoundaryValueTests
 {
-    private Algoritms algo;
-    private string result;
+    private GeneralDijkstra _dijkstra;
+    private string _buffer;
 
-    private void Setup(Cell start, Cell end)
+    private void Setup(Node start, Node end)
     {
-        result = string.Empty;
+        _buffer = string.Empty;
         var map = new bool[,]
         {
             { false, false, false },
             { true, true, false },
             { false, false, true }
         };
-        algo = new Algoritms(map, start, end)
+        _dijkstra = new GeneralDijkstra(map, start, end)
         {
-            Action = txt => { result += txt; }
+            Action = txt => { _buffer += txt; }
         };
-        algo.AlgoSearch(algo.Type["AStar"]);
+        _dijkstra.AlgorithmAStar();
     }
 
     [Test]
     public void Check_AStar_With_X_Of_Start_Node_Close_To_Up_Range()
     {
-        var start = new Cell(0, 1);
-        var end = new Cell(1, 1);
+        var start = new Node(0, 1);
+        var end = new Node(1, 1);
         
         var expect = "Количество итераций: 2\n" +
                      "Число ячеек: 2\n" +
@@ -40,14 +40,14 @@ public class AlgorithmAStarBoundaryValueTests
                      "e - end\n";
         Setup(start, end);
         
-        Assert.AreEqual(expect, result);
+        Assert.AreEqual(expect, _buffer);
     }
 
     [Test]
     public void Check_AStar_With_Y_Of_Start_Node_Close_To_Left_Range()
     {
-        var start = new Cell(1, 0);
-        var end = new Cell(1, 1);
+        var start = new Node(1, 0);
+        var end = new Node(1, 1);
         
         var expect = "Количество итераций: 2\n" +
                      "Число ячеек: 2\n" +
@@ -60,14 +60,14 @@ public class AlgorithmAStarBoundaryValueTests
                      "e - end\n";
         Setup(start, end);
         
-        Assert.AreEqual(expect, result);
+        Assert.AreEqual(expect, _buffer);
     }
 
     [Test]
     public void Check_AStar_With_X_Of_Start_Node_Close_To_Down_Range()
     {
-        var start = new Cell(2, 1);
-        var end = new Cell(1, 1);
+        var start = new Node(2, 1);
+        var end = new Node(1, 1);
         
         var expect = "Количество итераций: 2\n" +
                      "Число ячеек: 2\n" +
@@ -80,14 +80,14 @@ public class AlgorithmAStarBoundaryValueTests
                      "e - end\n";
         Setup(start, end);
         
-        Assert.AreEqual(expect, result);
+        Assert.AreEqual(expect, _buffer);
     }
 
     [Test]
     public void Check_AStar_With_Y_Of_Start_Node_Close_To_Right_Range()
     {
-        var start = new Cell(1, 2);
-        var end = new Cell(1, 1);
+        var start = new Node(1, 2);
+        var end = new Node(1, 1);
         
         var expect = "Количество итераций: 2\n" +
                      "Число ячеек: 2\n" +
@@ -100,14 +100,14 @@ public class AlgorithmAStarBoundaryValueTests
                      "e - end\n";
         Setup(start, end);
         
-        Assert.AreEqual(expect, result);
+        Assert.AreEqual(expect, _buffer);
     }
 
     [Test]
     public void Check_AStar_With_X_Of_End_Node_Close_To_Up_Range()
     {
-        var start = new Cell(1, 1);
-        var end = new Cell(0, 1);
+        var start = new Node(1, 1);
+        var end = new Node(0, 1);
         
         var expect = "Количество итераций: 2\n" +
                      "Число ячеек: 2\n" +
@@ -120,14 +120,14 @@ public class AlgorithmAStarBoundaryValueTests
                      "e - end\n";
         Setup(start, end);
         
-        Assert.AreEqual(expect, result);
+        Assert.AreEqual(expect, _buffer);
     }
 
     [Test]
     public void Check_AStar_With_Y_Of_End_Node_Close_To_Left_Range()
     {
-        var start = new Cell(1, 1);
-        var end = new Cell(1, 0);
+        var start = new Node(1, 1);
+        var end = new Node(1, 0);
         
         var expect = "Количество итераций: 2\n" +
                      "Число ячеек: 2\n" +
@@ -140,14 +140,14 @@ public class AlgorithmAStarBoundaryValueTests
                      "e - end\n";
         Setup(start, end);
         
-        Assert.AreEqual(expect, result);
+        Assert.AreEqual(expect, _buffer);
     }
 
     [Test]
     public void Check_AStar_With_X_Of_End_Node_Close_To_Down_Range()
     {
-        var start = new Cell(1, 1);
-        var end = new Cell(2, 1);
+        var start = new Node(1, 1);
+        var end = new Node(2, 1);
         
         var expect = "Количество итераций: 2\n" +
                      "Число ячеек: 2\n" +
@@ -160,14 +160,14 @@ public class AlgorithmAStarBoundaryValueTests
                      "e - end\n";
         Setup(start, end);
         
-        Assert.AreEqual(expect, result);
+        Assert.AreEqual(expect, _buffer);
     }
 
     [Test]
     public void Check_AStar_With_Y_Of_End_Node_Close_To_Right_Range()
     {
-        var start = new Cell(1, 1);
-        var end = new Cell(1, 2);
+        var start = new Node(1, 1);
+        var end = new Node(1, 2);
         
         var expect = "Количество итераций: 2\n" +
                      "Число ячеек: 2\n" +
@@ -180,14 +180,14 @@ public class AlgorithmAStarBoundaryValueTests
                      "e - end\n";
         Setup(start, end);
         
-        Assert.AreEqual(expect, result);
+        Assert.AreEqual(expect, _buffer);
     }
 
     [Test]
     public void Check_AStar_With_X_Of_Start_Node_Close_Out_Up_Range()
     {
-        var start = new Cell(-1, 1);
-        var end = new Cell(1, 2);
+        var start = new Node(-1, 1);
+        var end = new Node(1, 2);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => Setup(start, end));
         Assert.AreEqual("Стартовая точка лежит вне диапазонах карты", exception.Message);
@@ -196,8 +196,8 @@ public class AlgorithmAStarBoundaryValueTests
     [Test]
     public void Check_AStar_With_Y_Of_Start_Node_Close_Out_Left_Range()
     {
-        var start = new Cell(1, -1);
-        var end = new Cell(1, 2);
+        var start = new Node(1, -1);
+        var end = new Node(1, 2);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => Setup(start, end));
         Assert.AreEqual("Стартовая точка лежит вне диапазонах карты", exception.Message);
@@ -206,8 +206,8 @@ public class AlgorithmAStarBoundaryValueTests
     [Test]
     public void Check_AStar_With_X_Of_Start_Node_Close_Out_Down_Range()
     {
-        var start = new Cell(3, 1);
-        var end = new Cell(1, 2);
+        var start = new Node(3, 1);
+        var end = new Node(1, 2);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => Setup(start, end));
         Assert.AreEqual("Стартовая точка лежит вне диапазонах карты", exception.Message);
@@ -216,8 +216,8 @@ public class AlgorithmAStarBoundaryValueTests
     [Test]
     public void Check_AStar_With_Y_Of_Start_Node_Close_Out_Right_Range()
     {
-        var start = new Cell(1, 3);
-        var end = new Cell(1, 2);
+        var start = new Node(1, 3);
+        var end = new Node(1, 2);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => Setup(start, end));
         Assert.AreEqual("Стартовая точка лежит вне диапазонах карты", exception.Message);
@@ -226,8 +226,8 @@ public class AlgorithmAStarBoundaryValueTests
     [Test]
     public void Check_AStar_With_X_Of_End_Node_Close_Out_Up_Range()
     {
-        var start = new Cell(1, 1);
-        var end = new Cell(-1, 1);
+        var start = new Node(1, 1);
+        var end = new Node(-1, 1);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => Setup(start, end));
         Assert.AreEqual("Конечная точка лежит вне диапазонах карты", exception.Message);
@@ -236,8 +236,8 @@ public class AlgorithmAStarBoundaryValueTests
     [Test]
     public void Check_AStar_With_Y_Of_End_Node_Close_Out_Left_Range()
     {
-        var start = new Cell(1, 1);
-        var end = new Cell(1, -1);
+        var start = new Node(1, 1);
+        var end = new Node(1, -1);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => Setup(start, end));
         Assert.AreEqual("Конечная точка лежит вне диапазонах карты", exception.Message);
@@ -246,8 +246,8 @@ public class AlgorithmAStarBoundaryValueTests
     [Test]
     public void Check_AStar_With_X_Of_End_Node_Close_Out_Down_Range()
     {
-        var start = new Cell(1, 1);
-        var end = new Cell(3, 1);
+        var start = new Node(1, 1);
+        var end = new Node(3, 1);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => Setup(start, end));
         Assert.AreEqual("Конечная точка лежит вне диапазонах карты", exception.Message);
@@ -256,8 +256,8 @@ public class AlgorithmAStarBoundaryValueTests
     [Test]
     public void Check_AStar_With_Y_Of_End_Node_Close_Out_Right_Range()
     {
-        var start = new Cell(1, 1);
-        var end = new Cell(1, 3);
+        var start = new Node(1, 1);
+        var end = new Node(1, 3);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => Setup(start, end));
         Assert.AreEqual("Конечная точка лежит вне диапазонах карты", exception.Message);
