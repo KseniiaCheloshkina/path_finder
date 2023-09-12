@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-
+using Newtonsoft.Json;
 namespace pathFinding.src;
 
 
@@ -38,4 +38,23 @@ public class LoadTesting
         int exec_time = Convert.ToInt32(stopwatchElapsed.TotalMilliseconds);
         return exec_time;
     }
+
+    public static Dictionary<int, int> ChangeWallsPercent(string algo_name)
+    {
+        int width = 200;
+        int height = 200;
+        int walls_percent = 5;
+        bool[,] grid;
+        int[][] walls;
+        Dictionary<int, int> record_time;
+        GenerateGridByParams(out grid, out walls, width, height, walls_percent);
+        int time_in_ms = GenerateSolution(grid, walls, algo_name);
+        record_time = new Dictionary<int, int>()
+        {
+            { walls_percent, time_in_ms}
+        };
+        File.WriteAllText(@"..\..\..\data\results\change_percent.json", JsonConvert.SerializeObject(record_time));
+        return record_time;
+    }
+
 }
