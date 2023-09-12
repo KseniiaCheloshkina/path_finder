@@ -1,4 +1,5 @@
-﻿namespace pathFinding.src;
+namespace pathFinding.src;
+
 
 public class Grid
 {

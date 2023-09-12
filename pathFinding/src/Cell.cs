@@ -6,9 +6,9 @@ public class Cell
     public int Y { get; set; }
 
     // Перемещения
-    public int distance_from_start { get; set; } // Расстояние от стартовой точки до текущей
-    public int distance_to_target { get; set; } // Эвристика - расстояние от текущей точки до целевой
-    public int final_distance => distance_from_start + distance_to_target;
+    public double distance_from_start { get; set; } // Расстояние от стартовой точки до текущей
+    public double distance_to_target { get; set; } // Эвристика - расстояние от текущей точки до целевой
+    public double final_distance => distance_from_start + distance_to_target;
     public int price_hor_vert = 5;
     public int price_diagonal = 7;
 
