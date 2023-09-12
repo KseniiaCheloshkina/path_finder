@@ -201,14 +201,12 @@ public class Algoritms
 
         if (_path == null)
         {
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Action?.Invoke("Путь не найден!\n");
-            Console.ResetColor();
+            Action?.Invoke("Path not found!\n");
         }
         else
         {
-            Action?.Invoke($"Количество итераций: {_iter}\n" + $"Число ячеек: {_path.num_predecessors + 1}\n");
-            Action?.Invoke($"Вес пути: {_path.final_distance}\n");
+            Action?.Invoke($"Number of iterations: {_iter}\n" + $"Number of cells: {_path.num_predecessors + 1}\n");
+            Action?.Invoke($"Path weight: {_path.final_distance}\n");
 
             _path = _path.Predecessor;
 
@@ -228,7 +226,7 @@ public class Algoritms
             maxLenRow++;
 
         Action?.Invoke(" ".PadRight(maxLenRow));
-        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
         for (int i = 0; i < _grid.GetLength(1); i++)
         {
             Action?.Invoke($"{i}".PadRight(maxLenCol));
@@ -237,7 +235,7 @@ public class Algoritms
         Action?.Invoke("\n");
         for (int i = 0; i < _grid.GetLength(0); i++)
         {
-            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             Action?.Invoke($"{i}".PadRight(maxLenRow));
             for (int j = 0; j < _grid.GetLength(1); j++)
             {
@@ -245,32 +243,32 @@ public class Algoritms
                 var cell = listNode.FirstOrDefault(x => x.X == i && x.Y == j);
                 if (i == _start_loc.X && j == _start_loc.Y)
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Action?.Invoke("s".PadRight(maxLenCol));
                     continue;
                 }
                 if (i == _end_loc.X && j == _end_loc.Y)
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkBlue;
+                    Console.ForegroundColor = ConsoleColor.Green;
                     Action?.Invoke("e".PadRight(maxLenCol));
                     continue;
                 }
                 if (cell != null)
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.ForegroundColor = ConsoleColor.Magenta;
                     Action?.Invoke("*".PadRight(maxLenCol));
                     listNode.Remove(cell);
                     continue;
                 }
-                Action?.Invoke(_grid[i, j] ? "[]".PadRight(maxLenCol) : "0".PadRight(maxLenCol));
+                Action?.Invoke(_grid[i, j] ? "X".PadRight(maxLenCol) : "0".PadRight(maxLenCol));
             }
             Action?.Invoke("\n");
         }
 
-        Console.ForegroundColor = ConsoleColor.DarkYellow;
+        Console.ForegroundColor = ConsoleColor.Red;
         Action?.Invoke("s - start\n");
-        Console.ForegroundColor = ConsoleColor.DarkBlue;
-        Action?.Invoke("e - end\n");
+        Console.ForegroundColor = ConsoleColor.Green;
+        Action?.Invoke("f - finish\n");
         Console.ResetColor();
     }
 
