@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Spectre.Console;
 
 namespace pathFinding.src;
@@ -18,6 +17,7 @@ public static class Menu
                     "Set data",
                     "Find a solution",
                     "Help",
+                    "Load testing",
                     "Exit"
                 }));
 
@@ -33,10 +33,14 @@ public static class Menu
                 Console.WriteLine(File.ReadAllText(@"..\..\..\Data\Help.txt"));
                 MainMenu();
                 break;
+            case "Load testing":
+                RunLoadingTests();
+                MainMenu();
+                break;
         }
     }
 
-    // метод ввода данных карты и стартовой и целевой точек
+    // define input grid and condiotions
     public static void SetData()
     {
         var startCell = new Cell();
@@ -56,7 +60,7 @@ public static class Menu
                         "Back to Main"
                 }));
 
-        
+
         switch (operation)
         {
             // input from stdin
@@ -80,7 +84,7 @@ public static class Menu
                         .Title("Choose an input type?")
                         .PageSize(10)
                         .AddChoices(filesWithBack));
-                if (filename != "Back") 
+                if (filename != "Back")
                 {
                     var json_content = File.ReadAllText(filename);
                     var model = JsonConvert.DeserializeObject<JsonModel>(json_content);
@@ -125,7 +129,7 @@ public static class Menu
         }
     }
 
-    // метод выполнения решения двумя алгоритмами
+    // solution
     public static void FindSolution()
     {
         if (algoritm.EmptyFlag)
@@ -165,7 +169,7 @@ public static class Menu
         }
     }
 
-    // метод записи решения в файл
+    // save into file
     private static void WriteInFile()
     {
         var path = string.Empty;
@@ -202,5 +206,12 @@ public static class Menu
         // сбрасываем запись в файл на вывод на экран
         algoritm.ResetAction();
         MainMenu();
+    }
+
+    // load testing
+    public static void RunLoadingTests()
+    {
+        
+
     }
 }
