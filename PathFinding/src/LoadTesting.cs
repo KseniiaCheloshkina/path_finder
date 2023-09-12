@@ -5,6 +5,7 @@ namespace PathFinding.src;
 
 public class LoadTesting
 {
+    // генерация сетки и стен
     public static void GenerateGridByParams(out bool[,] grid, out int[,] walls, int width, int height, int walls_percent)
     {
         grid = new bool[width, height];
@@ -23,7 +24,8 @@ public class LoadTesting
             walls[i,1] = y;
         }
     }
-
+    
+    // считаем время работы заданного алгоритма
     public static int GenerateSolution(bool[,] grid, int[,] walls, string algo_name)
     {
         int width = grid.GetLength(0);
