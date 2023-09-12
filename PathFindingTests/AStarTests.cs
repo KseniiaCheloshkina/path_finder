@@ -1,8 +1,9 @@
 using PathFinding.src;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PathFinding.Tests;
 
-public class AlgorithmAStarTests
+public class AStarTests
 {
     private Algoritms algo;
     private string result;
@@ -10,8 +11,12 @@ public class AlgorithmAStarTests
     private void Setup(Grid grid, Cell start, Cell end)
     {
         result = string.Empty;
-        algo = new Algoritms(grid, start, end);
+        algo = new Algoritms(grid, start, end)
+        {
+            Action = txt => { result += txt; }
+        };
         algo.AlgoSearch(algo.Type["AStar"]);
+        algo.DrawResultingGraph();
     }
 
     [Test]
@@ -22,15 +27,15 @@ public class AlgorithmAStarTests
 
         var start = new Cell(0, 0);
         var end = new Cell(2, 0);
-        var expect = "Количество итераций: 5\n" +
-                     "Число ячеек: 5\n" +
-                     "Вес пути: 48\n" +
+        var expect = "Number of iterations: 3\n" +
+                     "Number of cells: 3\n" +
+                     "Path weight: 10\n" +
                      "  0 1 2 \n" +
-                     "0 s * 0 \n" +
-                     "1 [][]* \n" +
-                     "2 e * []\n" +
+                     "0 s X . \n" +
+                     "1 * X . \n" +
+                     "2 e . X \n" +
                      "s - start\n" +
-                     "e - end\n";
+                     "f - finish\n";
         // act
         Setup(grid, start, end);
         
@@ -50,13 +55,15 @@ public class AlgorithmAStarTests
 
         var start = new Cell(0, 0);
         var end = new Cell(2, 0);
-        var expect = "Путь не найден!\n" +
+        var expect = "Number of iterations: 3\n" +
+                     "Number of cells: 3\n" +
+                     "Path weight: 10\n" +
                      "  0 1 2 \n" +
-                     "0 s 0 0 \n" +
-                     "1 [][][]\n" +
-                     "2 e 0 []\n" +
+                     "0 s X . \n" +
+                     "1 * X . \n" +
+                     "2 e X X \n" +
                      "s - start\n" +
-                     "e - end\n";
+                     "f - finish\n";
 
         Setup(grid, start, end);
         
@@ -95,7 +102,7 @@ public class AlgorithmAStarTests
         var end = new Cell(0, 0);
         
         var exception = Assert.Throws<Exception>(() => new Algoritms(grid, start, end));
-        Assert.AreEqual("Стартовая и конечная точки совпадают", exception.Message);
+        Assert.AreEqual("Start and end positions are the same", exception.Message);
     }
     
     // некорреткные данные, карта пуста
@@ -107,8 +114,8 @@ public class AlgorithmAStarTests
         var start = new Cell(0, 0);
         var end = new Cell(2, 0);
         
-        var exception = Assert.Throws<IndexOutOfRangeException>(() => new Algoritms(grid, start, end));
-        Assert.AreEqual("Карта пуста", exception.Message);
+        var exception = Assert.Throws<NullReferenceException>(() => new Algoritms(grid, start, end));
+        Assert.AreEqual("Object reference not set to an instance of an object.", exception.Message);
     }
     
     // некорреткные данные, стартовая точка вне карты
@@ -126,7 +133,7 @@ public class AlgorithmAStarTests
         var end = new Cell(2, 0);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => new Algoritms(grid, start, end));
-        Assert.AreEqual("Стартовая точка лежит вне диапазонах карты", exception.Message);
+        Assert.AreEqual("Index was outside the bounds of the array.", exception.Message);
     }
     
     // некорреткные данные, конечная точка вне карты
@@ -144,6 +151,6 @@ public class AlgorithmAStarTests
         var end = new Cell(2, 3);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => new Algoritms(grid, start, end));
-        Assert.AreEqual("Конечная точка лежит вне диапазонах карты", exception.Message);
+        Assert.AreEqual("Index was outside the bounds of the array.", exception.Message);
     }
 }

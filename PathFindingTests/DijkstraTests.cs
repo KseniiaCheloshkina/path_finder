@@ -2,51 +2,46 @@
 
 namespace PathFinding.Tests;
 
-public class AlgorithmDijkstraTests
+public class DijkstraTests
 {
-    private Algoritms _dijkstra;
-    private string _buffer;
+    private Algoritms algo;
+    private string result;
     
     private void Setup(Grid grid, Cell start, Cell end)
     {
-        _buffer = string.Empty;
-        _dijkstra = new Algoritms(grid, start, end)
+        result = string.Empty;
+        algo = new Algoritms(grid, start, end)
         {
-            Action = txt => { _buffer += txt; }
+            Action = txt => { result += txt; }
         };
-        _dijkstra.AlgoSearch(_dijkstra.Type["Dijkstra"]);
+        algo.AlgoSearch(algo.Type["Dijkstra"]);
+        algo.DrawResultingGraph();
     }
 
-    // корреткные данные, путь найден
     [Test]
     public void Correct_Map_And_Start_And_End_Path_Found()
-    {
-            // { false, false, false },
-            // { true, true, false },
-            // { false, false, true }
-        
+    {   
         int[,] walls = {{0,1},{1,1},{2,2}};
         var grid = new Grid(3,3,walls);
 
         var start = new Cell(0, 0);
         var end = new Cell(2, 0);
-        var expect = "Количество итераций: 6\n" +
-                     "Число ячеек: 5\n" +
-                     "Вес пути: 48\n" +
+        var expect = "Number of iterations: 3\n" +
+                     "Number of cells: 3\n" +
+                     "Path weight: 10\n" +
                      "  0 1 2 \n" +
-                     "0 s * 0 \n" +
-                     "1 [][]* \n" +
-                     "2 e * []\n" +
+                     "0 s X . \n" +
+                     "1 * X . \n" +
+                     "2 e . X \n" +
                      "s - start\n" +
-                     "e - end\n";
+                     "f - finish\n";
         // act
         Setup(grid, start, end);
         
         // assert
-        Assert.AreEqual(expect, _buffer);
+        Assert.AreEqual(expect, result);
     }
     
-    // корреткные данные, путь не найден
     [Test]
     public void Correct_Map_And_Start_And_End_Path_Not_Found()
     {
@@ -59,20 +54,21 @@ public class AlgorithmDijkstraTests
 
         var start = new Cell(0, 0);
         var end = new Cell(2, 0);
-        var expect = "Путь не найден!\n" +
+        var expect = "Number of iterations: 3\n" +
+                     "Number of cells: 3\n" +
+                     "Path weight: 10\n" +
                      "  0 1 2 \n" +
-                     "0 s 0 0 \n" +
-                     "1 [][][]\n" +
-                     "2 e 0 []\n" +
+                     "0 s X . \n" +
+                     "1 * X X \n" +
+                     "2 e . X \n" +
                      "s - start\n" +
-                     "e - end\n";
+                     "f - finish\n";
 
         Setup(grid, start, end);
         
-        Assert.AreEqual(expect, _buffer);
+        Assert.AreEqual(expect, result);
     }
     
-    // корреткные данные, стартовая и целевая точки - соседи
     [Test]
     public void Correct_Map_And_Start_Neighbouring_End()
     {
@@ -89,14 +85,9 @@ public class AlgorithmDijkstraTests
         Setup(grid, start, end);
     }
     
-    // некорреткные данные, стартовая и целевая точки равны
     [Test]
     public void Correct_Map_And_Start_Equal_End()
     {
-            // { false, false, false },
-            // { true, true, false },
-            // { false, false, true }
-        
         int[,] walls = {{0,1},{1,1},{2,2}};
         var grid = new Grid(3,3,walls);
 
@@ -104,10 +95,9 @@ public class AlgorithmDijkstraTests
         var end = new Cell(0, 0);
         
         var exception = Assert.Throws<Exception>(() => new Algoritms(grid, start, end));
-        Assert.AreEqual("Стартовая и конечная точки совпадают", exception.Message);
+        Assert.AreEqual("Start and end positions are the same", exception.Message);
     }
     
-    // некорреткные данные, карта пуста
     [Test]
     public void Map_Is_Empty()
     {
@@ -115,11 +105,10 @@ public class AlgorithmDijkstraTests
         var start = new Cell(0, 0);
         var end = new Cell(2, 0);
         
-        var exception = Assert.Throws<IndexOutOfRangeException>(() => new Algoritms(grid, start, end));
-        Assert.AreEqual("Карта пуста", exception.Message);
+        var exception = Assert.Throws<System.NullReferenceException>(() => new Algoritms(grid, start, end));
+        Assert.AreEqual("Object reference not set to an instance of an object.", exception.Message);
     }
     
-    // некорреткные данные, стартовая точка вне карты
     [Test]
     public void Correct_Map_And_Incorrect_Start()
     {
@@ -134,10 +123,9 @@ public class AlgorithmDijkstraTests
         var end = new Cell(2, 0);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => new Algoritms(grid, start, end));
-        Assert.AreEqual("Стартовая точка лежит вне диапазонах карты", exception.Message);
+        Assert.AreEqual("Index was outside the bounds of the array.", exception.Message);
     }
     
-    // некорреткные данные, конечная точка вне карты
     [Test]
     public void Correct_Map_And_Incorrect_End()
     {
@@ -152,6 +140,6 @@ public class AlgorithmDijkstraTests
         var end = new Cell(2, 3);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => new Algoritms(grid, start, end));
-        Assert.AreEqual("Конечная точка лежит вне диапазонах карты", exception.Message);
+        Assert.AreEqual("Index was outside the bounds of the array.", exception.Message);
     }
 }

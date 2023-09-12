@@ -2,7 +2,7 @@
 
 namespace PathFinding.Tests;
 
-public class AlgorithmDijkstraBoundaryValueTests
+public class DijkstraBoundaryValueTests
 {
     private Algoritms algo;
     private string _buffer;
@@ -23,23 +23,24 @@ public class AlgorithmDijkstraBoundaryValueTests
             Action = txt => { _buffer += txt; }
         };
         algo.AlgoSearch(algo.Type["Dijkstra"]);
+        algo.DrawResultingGraph();
     }
 
     [Test]
-    public void Check_Dijkstra_With_X_Of_Start_Node_Close_To_Up_Range()
+    public void Dijkstra_With_X_Of_Start_Node_Close_To_Up_Range()
     {
         var start = new Cell(0, 1);
         var end = new Cell(1, 1);
-        
-        var expect = "Количество итераций: 3\n" +
-                     "Число ячеек: 2\n" +
-                     "Вес пути: 10\n" +
+
+        var expect = "Number of iterations: 3\n" +
+                     "Number of cells: 2\n" +
+                     "Path weight: 5\n" +
                      "  0 1 2 \n" +
-                     "0 0 s 0 \n" +
-                     "1 []e 0 \n" +
-                     "2 0 0 []\n" +
+                     "0 . s . \n" +
+                     "1 . e . \n" +
+                     "2 . . X \n" +
                      "s - start\n" +
-                     "e - end\n";
+                     "f - finish\n";
         Setup(start, end);
         
         Assert.AreEqual(expect, _buffer);
@@ -50,16 +51,16 @@ public class AlgorithmDijkstraBoundaryValueTests
     {
         var start = new Cell(1, 0);
         var end = new Cell(1, 1);
-        
-        var expect = "Количество итераций: 4\n" +
-                     "Число ячеек: 2\n" +
-                     "Вес пути: 10\n" +
+
+        var expect = "Number of iterations: 4\n" +
+                     "Number of cells: 2\n" +
+                     "Path weight: 5\n" +
                      "  0 1 2 \n" +
-                     "0 0 0 0 \n" +
-                     "1 s e 0 \n" +
-                     "2 0 0 []\n" +
+                     "0 . X . \n" +
+                     "1 s e . \n" +
+                     "2 . . X \n" +
                      "s - start\n" +
-                     "e - end\n";
+                     "f - finish\n";
         Setup(start, end);
         
         Assert.AreEqual(expect, _buffer);
@@ -70,16 +71,16 @@ public class AlgorithmDijkstraBoundaryValueTests
     {
         var start = new Cell(2, 1);
         var end = new Cell(1, 1);
-        
-        var expect = "Количество итераций: 3\n" +
-                     "Число ячеек: 2\n" +
-                     "Вес пути: 10\n" +
+
+        var expect = "Number of iterations: 3\n" +
+                     "Number of cells: 2\n" +
+                     "Path weight: 5\n" +
                      "  0 1 2 \n" +
-                     "0 0 0 0 \n" +
-                     "1 []e 0 \n" +
-                     "2 0 s []\n" +
+                     "0 . X . \n" +
+                     "1 . e . \n" +
+                     "2 . s X \n" +
                      "s - start\n" +
-                     "e - end\n";
+                     "f - finish\n";
         Setup(start, end);
         
         Assert.AreEqual(expect, _buffer);
@@ -90,16 +91,16 @@ public class AlgorithmDijkstraBoundaryValueTests
     {
         var start = new Cell(1, 2);
         var end = new Cell(1, 1);
-        
-        var expect = "Количество итераций: 2\n" +
-                     "Число ячеек: 2\n" +
-                     "Вес пути: 10\n" +
+
+        var expect = "Number of iterations: 2\n" +
+                     "Number of cells: 2\n" +
+                     "Path weight: 5\n" +
                      "  0 1 2 \n" +
-                     "0 0 0 0 \n" +
-                     "1 []e s \n" +
-                     "2 0 0 []\n" +
+                     "0 . X . \n" +
+                     "1 . e s \n" +
+                     "2 . . X \n" +
                      "s - start\n" +
-                     "e - end\n";
+                     "f - finish\n";
         Setup(start, end);
         
         Assert.AreEqual(expect, _buffer);
@@ -110,16 +111,16 @@ public class AlgorithmDijkstraBoundaryValueTests
     {
         var start = new Cell(1, 1);
         var end = new Cell(0, 1);
-        
-        var expect = "Количество итераций: 2\n" +
-                     "Число ячеек: 2\n" +
-                     "Вес пути: 10\n" +
+
+        var expect = "Number of iterations: 3\n" +
+                     "Number of cells: 2\n" +
+                     "Path weight: 5\n" +
                      "  0 1 2 \n" +
-                     "0 0 e 0 \n" +
-                     "1 []s 0 \n" +
-                     "2 0 0 []\n" +
+                     "0 . e . \n" +
+                     "1 . s . \n" +
+                     "2 . . X \n" +
                      "s - start\n" +
-                     "e - end\n";
+                     "f - finish\n";
         Setup(start, end);
         
         Assert.AreEqual(expect, _buffer);
@@ -130,16 +131,16 @@ public class AlgorithmDijkstraBoundaryValueTests
     {
         var start = new Cell(1, 1);
         var end = new Cell(1, 0);
-        
-        var expect = "Количество итераций: 2\n" +
-                     "Число ячеек: 2\n" +
-                     "Вес пути: 10\n" +
+
+        var expect = "Number of iterations: 2\n" +
+                     "Number of cells: 2\n" +
+                     "Path weight: 5\n" +
                      "  0 1 2 \n" +
-                     "0 0 0 0 \n" +
-                     "1 e s 0 \n" +
-                     "2 0 0 []\n" +
+                     "0 . X . \n" +
+                     "1 e s . \n" +
+                     "2 . . X \n" +
                      "s - start\n" +
-                     "e - end\n";
+                     "f - finish\n";
         Setup(start, end);
         
         Assert.AreEqual(expect, _buffer);
@@ -151,15 +152,15 @@ public class AlgorithmDijkstraBoundaryValueTests
         var start = new Cell(1, 1);
         var end = new Cell(2, 1);
         
-        var expect = "Количество итераций: 3\n" +
-                     "Число ячеек: 2\n" +
-                     "Вес пути: 10\n" +
+        var expect = "Number of iterations: 3\n" +
+                     "Number of cells: 2\n" +
+                     "Path weight: 5\n" +
                      "  0 1 2 \n" +
-                     "0 0 0 0 \n" +
-                     "1 []s 0 \n" +
-                     "2 0 e []\n" +
+                     "0 . X . \n" +
+                     "1 . s . \n" +
+                     "2 . e X \n" +
                      "s - start\n" +
-                     "e - end\n";
+                     "f - finish\n";
         Setup(start, end);
         
         Assert.AreEqual(expect, _buffer);
@@ -170,16 +171,16 @@ public class AlgorithmDijkstraBoundaryValueTests
     {
         var start = new Cell(1, 1);
         var end = new Cell(1, 2);
-        
-        var expect = "Количество итераций: 4\n" +
-                     "Число ячеек: 2\n" +
-                     "Вес пути: 10\n" +
+
+        var expect = "Number of iterations: 4\n" +
+                     "Number of cells: 2\n" +
+                     "Path weight: 5\n" +
                      "  0 1 2 \n" +
-                     "0 0 0 0 \n" +
-                     "1 []s e \n" +
-                     "2 0 0 []\n" +
+                     "0 . X . \n" +
+                     "1 . s e \n" +
+                     "2 . . X \n" +
                      "s - start\n" +
-                     "e - end\n";
+                     "f - finish\n";
         Setup(start, end);
         
         Assert.AreEqual(expect, _buffer);
@@ -192,7 +193,7 @@ public class AlgorithmDijkstraBoundaryValueTests
         var end = new Cell(1, 2);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => Setup(start, end));
-        Assert.AreEqual("Стартовая точка лежит вне диапазонах карты", exception.Message);
+        Assert.AreEqual("Start and end positions should be inside a grid", exception.Message);
     }
 
     [Test]
@@ -202,7 +203,7 @@ public class AlgorithmDijkstraBoundaryValueTests
         var end = new Cell(1, 2);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => Setup(start, end));
-        Assert.AreEqual("Стартовая точка лежит вне диапазонах карты", exception.Message);
+        Assert.AreEqual("Start and end positions should be inside a grid", exception.Message);
     }
 
     [Test]
@@ -212,7 +213,7 @@ public class AlgorithmDijkstraBoundaryValueTests
         var end = new Cell(1, 2);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => Setup(start, end));
-        Assert.AreEqual("Стартовая точка лежит вне диапазонах карты", exception.Message);
+        Assert.AreEqual("Index was outside the bounds of the array.", exception.Message);
     }
 
     [Test]
@@ -222,7 +223,7 @@ public class AlgorithmDijkstraBoundaryValueTests
         var end = new Cell(1, 2);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => Setup(start, end));
-        Assert.AreEqual("Стартовая точка лежит вне диапазонах карты", exception.Message);
+        Assert.AreEqual("Index was outside the bounds of the array.", exception.Message);
     }
 
     [Test]
@@ -232,7 +233,7 @@ public class AlgorithmDijkstraBoundaryValueTests
         var end = new Cell(-1, 1);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => Setup(start, end));
-        Assert.AreEqual("Конечная точка лежит вне диапазонах карты", exception.Message);
+        Assert.AreEqual("Start and end positions should be inside a grid", exception.Message);
     }
 
     [Test]
@@ -242,7 +243,7 @@ public class AlgorithmDijkstraBoundaryValueTests
         var end = new Cell(1, -1);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => Setup(start, end));
-        Assert.AreEqual("Конечная точка лежит вне диапазонах карты", exception.Message);
+        Assert.AreEqual("Start and end positions should be inside a grid", exception.Message);
     }
 
     [Test]
@@ -252,7 +253,7 @@ public class AlgorithmDijkstraBoundaryValueTests
         var end = new Cell(3, 1);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => Setup(start, end));
-        Assert.AreEqual("Конечная точка лежит вне диапазонах карты", exception.Message);
+        Assert.AreEqual("Index was outside the bounds of the array.", exception.Message);
     }
 
     [Test]
@@ -262,6 +263,6 @@ public class AlgorithmDijkstraBoundaryValueTests
         var end = new Cell(1, 3);
         
         var exception = Assert.Throws<IndexOutOfRangeException>(() => Setup(start, end));
-        Assert.AreEqual("Конечная точка лежит вне диапазонах карты", exception.Message);
+        Assert.AreEqual("Index was outside the bounds of the array.", exception.Message);
     }
 }
