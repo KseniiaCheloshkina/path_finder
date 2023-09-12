@@ -23,7 +23,7 @@ public static class Menu
         var operation = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
                 .Title("Choose an operation?")
-                .PageSize(5)
+                .PageSize(6)
                 .HighlightStyle(highlightStyle)
                 .AddChoices(new[] {
                     "Set data",
@@ -44,10 +44,6 @@ public static class Menu
                 break;
             case "Help":
                 Console.WriteLine(File.ReadAllText(FilePath("Help.txt")));
-                MainMenu();
-                break;
-            case "Load testing":
-                RunLoadingTests();
                 MainMenu();
                 break;
             case "Load testing":

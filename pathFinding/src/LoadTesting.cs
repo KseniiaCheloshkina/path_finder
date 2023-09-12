@@ -5,24 +5,26 @@ namespace pathFinding.src;
 
 public class LoadTesting
 {
-    public static void GenerateGridByParams(out bool[,] grid,out int[][] walls, int width, int height, int walls_percent)
+    public static void GenerateGridByParams(out bool[,] grid, out int[,] walls, int width, int height, int walls_percent)
     {
         grid = new bool[width, height];
         double n_walls = walls_percent * width * height / 100;
         int num_walls = Convert.ToInt32(n_walls);
         // generate coords and fill grid with walls
         var rnd = new Random();
-        walls = new int[num_walls][];
+
+        walls = new int[num_walls,2];
         for (int i = 0; i < num_walls; i++)
         {
             int x = rnd.Next(0, width);
             int y = rnd.Next(0, height);
             grid[x, y] = true;
-            walls[i] = new int[2] { x, y };
+            walls[i,0] = x;
+            walls[i,1] = y;
         }
     }
 
-    public static int GenerateSolution(bool[,] grid, int[][] walls, string algo_name)
+    public static int GenerateSolution(bool[,] grid, int[,] walls, string algo_name)
     {
         int width = grid.GetLength(0);
         int height = grid.GetLength(1);
@@ -44,7 +46,7 @@ public class LoadTesting
         int width = 100;
         int height = 100;
         bool[,] grid;
-        int[][] walls;
+        int[,] walls;
         int[] start_pos = { 0, 0 };
         int[] end_pos = { width - 1, width - 1 };
         Dictionary<int, Dictionary<string,int>> record_time = new Dictionary<int, Dictionary<string, int>>();
@@ -57,7 +59,7 @@ public class LoadTesting
             // save dataset
             var algoritm = new Algoritms(walls, grid, new Cell(start_pos), new Cell(end_pos));
             string fName = Convert.ToString(walls_percent);
-            File.WriteAllText(@"..\..\..\data\load_testing\changing_percent_" + fName  + ".json", JsonConvert.SerializeObject(new
+            File.WriteAllText(Menu.FilePath("load_testing",$"changing_percent_{fName}.json"), JsonConvert.SerializeObject(new
             {
                 algoritm.grid_size,
                 algoritm.walls,
@@ -82,7 +84,7 @@ public class LoadTesting
     {
         int walls_percent = 20;
         bool[,] grid;
-        int[][] walls;
+        int[,] walls;
         int[] start_pos = { 0, 0 };
         Dictionary<int, Dictionary<string, int>> record_time = new Dictionary<int, Dictionary<string, int>>();
         // width = height
@@ -97,7 +99,7 @@ public class LoadTesting
             // save dataset
             var algoritm = new Algoritms(walls, grid, new Cell(start_pos), new Cell(end_pos));
             string fName = Convert.ToString(width * multiplier);
-            File.WriteAllText(@"..\..\..\data\load_testing\changing_width_" + fName + ".json", JsonConvert.SerializeObject(new
+            File.WriteAllText(Menu.FilePath("load_testing",$"changing_width_{fName}.json"), JsonConvert.SerializeObject(new
             {
                 algoritm.grid_size,
                 algoritm.walls,
