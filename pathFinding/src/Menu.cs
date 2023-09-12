@@ -156,10 +156,12 @@ public static class Menu
         {
             case "Algo AStar":
                 algoritm.AlgoSearch(algoritm.Type["AStar"]);
+                algoritm.DrawResultingGraph();
                 MainMenu();
                 break;
             case "Algo Dijkstra":
                 algoritm.AlgoSearch(algoritm.Type["Dijkstra"]);
+                algoritm.DrawResultingGraph();
                 MainMenu();
                 break;
             case "Save result to file":
@@ -215,17 +217,12 @@ public static class Menu
     // load testing
     public static void RunLoadingTests()
     {
-        //int width = 5;
-        //int height = 6;
-        //int walls_percent = 70;
-        //string algo_name = "AStar";
-        //bool[,] grid;
-        //int[][] walls;
-        //LoadTesting.GenerateGridByParams(out grid, out walls, width, height, walls_percent);
-        //int time_in_ms = LoadTesting.GenerateSolution(grid, walls, algo_name);
-        //Console.Write("Total execution time in ms: ");
-        //Console.WriteLine(time_in_ms);
-        Dictionary<int, int> result = LoadTesting.ChangeWallsPercent("AStar");
-        Console.WriteLine(result);
+        // run with different percantage of walls
+        //Dictionary<int, Dictionary<string, int>> results = LoadTesting.ChangeWallsPercent();
+        //File.WriteAllText(@"..\..\..\data\results\change_percent.json", JsonConvert.SerializeObject(results));
+
+        // run with different grid size
+        Dictionary<int, Dictionary<string, int>> results = LoadTesting.ChangeGridSize();
+        File.WriteAllText(@"..\..\..\data\results\change_width.json", JsonConvert.SerializeObject(results));
     }
 }
