@@ -8,12 +8,12 @@ public static class Menu
     private static Algoritms algoritm = new Algoritms();
 
     public static string FilePath(string file) {
-        string dataFolder = Path.Combine("Data");
+        string dataFolder = Path.Combine("..", "..", "..", "Data");
         return Path.Combine(dataFolder,file);
     }
 
     public static string FilePath(string folder, string file) {
-        string dataFolder = Path.Combine("Data");
+        string dataFolder = Path.Combine("..", "..", "..", "Data");
         return Path.Combine(dataFolder, folder, file);
     }
 
@@ -28,9 +28,8 @@ public static class Menu
                 .AddChoices(new[] {
                     "Set data",
                     "Find a solution",
-                    "Help",
                     "Load testing",
-                    "Test",
+                    "Help",
                     "Exit"
                 }));
         
