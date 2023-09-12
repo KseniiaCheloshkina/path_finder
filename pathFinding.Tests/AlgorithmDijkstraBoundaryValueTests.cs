@@ -1,14 +1,13 @@
-﻿using PathFinding.Algorithms;
-using PathFinding.Models;
+﻿using pathFinding.src;
 
 namespace PathFinding.Tests;
 
 public class AlgorithmDijkstraBoundaryValueTests
 {
-    private GeneralDijkstra _dijkstra;
+    private Algoritms _dijkstra;
     private string _buffer;
 
-    private void Setup(Node start, Node end)
+    private void Setup(Cell start, Cell end)
     {
         _buffer = string.Empty;
         var map = new bool[,]
@@ -17,7 +16,7 @@ public class AlgorithmDijkstraBoundaryValueTests
             { true, true, false },
             { false, false, true }
         };
-        _dijkstra = new GeneralDijkstra(map, start, end)
+        _dijkstra = new Algoritms(map, start, end)
         {
             Action = txt => { _buffer += txt; }
         };
