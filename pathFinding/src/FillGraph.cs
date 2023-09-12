@@ -3,8 +3,9 @@
 public static class FillGraph
 {
     // Define walls on the map
-    public static void DefineWalls(out int[][] walls, bool[,] map)
+    public static int[,] DefineWalls(bool[,] map)
     {
+        
         Console.WriteLine("Input number of walls");
         var num_walls = -999;
         var mess = "Insert positive number";
@@ -22,15 +23,18 @@ public static class FillGraph
             }
 
         }
-        walls = new int[num_walls][];
+
+        int[,] walls = new int[num_walls,2];
 
         for (int i = 0; i < num_walls; i++)
         {
             Console.WriteLine($"Insert coordinate of {i + 1} wall using the following format: x y");
             InputPoint(out var node, map.GetLength(0), map.GetLength(1));
             map[node.X, node.Y] = true;
-            walls[i] = new int[] { node.X, node.Y };
+            walls[i,0] = node.X;
+            walls[i,1] = node.Y;
         }
+        return walls;
     }
 
     // Manual map designing
@@ -103,7 +107,7 @@ public static class FillGraph
             Console.ResetColor();
             for (int j = 0; j < map.GetLength(1); j++)
             {
-                Console.Write(map[i, j] ? "X".PadRight(maxLenCol) : "0".PadRight(maxLenCol));
+                Console.Write(map[i, j] ? "X".PadRight(maxLenCol) : ".".PadRight(maxLenCol));
             }
             Console.WriteLine();
         }
@@ -117,7 +121,7 @@ public static class FillGraph
         while (true)
         {
             Console.WriteLine("Enter file name:");
-            path = @"..\..\..\data\results\" + Console.ReadLine();
+            path = Menu.FilePath("results", Console.ReadLine());
             var fileInfo = new FileInfo(path);
             if (fileInfo.Extension == ".txt")
                 break;

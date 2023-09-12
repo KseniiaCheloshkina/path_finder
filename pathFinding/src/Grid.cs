@@ -7,15 +7,18 @@ public class Grid
 {
     public JsonModel grid_params { get; set; }
 
-    public bool[,] matrix { get; set; };
-    public int[,] walls { get; set; };
-    public int width { get; set; };
-    public int height { get; set; };
+    public bool[,] matrix { get; set; }
+    public int[,] walls { get; set; }
+    public int width { get; set; }
+    public int height { get; set; }
 
     public Grid(JsonModel grid_params)
     {
         this.grid_params = grid_params;
-
+        this.walls = grid_params.walls;
+        this.width = grid_params.grid_size[0];
+        this.height = grid_params.grid_size[1];
+        generate_grid();
     }
 
     public Grid(int width, int height, int [,] walls)
@@ -30,16 +33,21 @@ public class Grid
         }
     }
 
+    public Grid()
+    {
+    }
+
+
     public bool[,] generate_grid()
     {
-        matrix = new bool[grid_params.grid_size[0], grid_params.grid_size[1]];
+        this.matrix = new bool[width, height];
 
         // set walls
-        foreach (var wall in grid_params.walls)
+        for (int i = 0; i < walls.GetLength(0); i++)
         {
-            matrix[wall[0], wall[1]] = true;
+            this.matrix[walls[i,0],walls[i,1]] = true;
         }
-        return matrix;
+        return this.matrix;
     }
 
     public static bool[,] static_generate_grid(int width, int height, int[,] walls)

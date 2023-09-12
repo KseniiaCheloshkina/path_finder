@@ -14,7 +14,7 @@ public class AlgorithmAStarBoundaryValueTests
         int height = 5;
         int[,] walls = {{ 0, 1 },{ 2, 4}};
         Grid grid = new Grid(width,height,walls);
-        algo = new Algoritms(grid, start, end)
+        algo = new Algoritms(grid, start, end);
         algo.AlgoSearch(algo.Type["AStar"]);
     }
 
