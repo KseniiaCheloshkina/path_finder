@@ -7,6 +7,16 @@ public static class Menu
 {
     private static Algoritms algoritm = new Algoritms();
 
+    public static string FilePath(string file) {
+        string dataFolder = Path.Combine("Data");
+        return Path.Combine(dataFolder,file);
+    }
+
+    public static string FilePath(string folder, string file) {
+        string dataFolder = Path.Combine("Data");
+        return Path.Combine(dataFolder, folder, file);
+    }
+
     public static void MainMenu()
     {
         var highlightStyle = new Style().Foreground(Color.Purple);
@@ -19,9 +29,10 @@ public static class Menu
                     "Set data",
                     "Find a solution",
                     "Help",
+                    "Load testing",
                     "Exit"
                 }));
-
+        
         switch (operation)
         {
             case "Set data":
@@ -31,20 +42,24 @@ public static class Menu
                 FindSolution();
                 break;
             case "Help":
-                Console.WriteLine(File.ReadAllText(@"..\..\..\Data\Help.txt"));
+                Console.WriteLine(File.ReadAllText(FilePath("Help.txt")));
+                MainMenu();
+                break;
+            case "Load testing":
+                RunLoadingTests();
                 MainMenu();
                 break;
         }
     }
 
-    // метод ввода данных карты и стартовой и целевой точек
+    // define input grid and condiotions
     public static void SetData()
     {
         var startCell = new Cell();
         var endCell = new Cell();
         var grid = new bool[,] { };
         int width, height;
-        int[][] walls;
+        int[,] walls;
 
         var highlightStyle = new Style().Foreground(Color.Purple);
         var operation = AnsiConsole.Prompt(
@@ -59,14 +74,14 @@ public static class Menu
                         "Back to Main"
                 }));
 
-        
+
         switch (operation)
         {
             // input from stdin
             case "Insert in stdin":
                 FillGraph.GridCreation(out width, out height, out grid); // get input size
                 // TODO: add walls on the map in ShowMap
-                FillGraph.DefineWalls(out walls, grid); // create walls
+                walls = FillGraph.DefineWalls(grid); // create walls
                 Console.WriteLine("Insert coordinates of start position in format x y");
                 FillGraph.InputPoint(out startCell, width, height);  // create start position
                 Console.WriteLine("Insert coordinates of end position in format x y");
@@ -77,7 +92,7 @@ public static class Menu
 
             case "Read from file":
  
-                string[] files = Directory.GetFiles(@"..\..\..\data\input_data\");
+                string[] files = Directory.GetFiles(FilePath("input_data"));
                 string[] filesWithBack = new List<string>(files) { "Back" }.ToArray();
                 var filename = AnsiConsole.Prompt(
                     new SelectionPrompt<string>()
@@ -85,15 +100,14 @@ public static class Menu
                         .PageSize(10)
                         .HighlightStyle(highlightStyle)
                         .AddChoices(filesWithBack));
-                if (filename != "Back") 
+                if (filename != "Back")
                 {
                     var model = JsonConvert.DeserializeObject<JsonModel>(File.ReadAllText(filename));
 
                     if (model != null)
                     {
                         var new_grid = new Grid(model);
-                        var grid_matrix = new_grid.generate_grid();
-                        algoritm = new Algoritms(model.walls, grid_matrix, new Cell(model.start_node), new Cell(model.end_node));
+                        algoritm = new Algoritms(new_grid, new Cell(model.start_node), new Cell(model.end_node));
                     }
                     Console.WriteLine($"File loaded {filename} \n");
                 }
@@ -108,7 +122,7 @@ public static class Menu
                 }
                 Console.Write("Insert name of file with extention (1.json): ");
                 var fName = Console.ReadLine();
-                File.WriteAllText(@"..\..\..\data\input_data\" + fName, JsonConvert.SerializeObject(new
+                File.WriteAllText(FilePath("input_data",fName), JsonConvert.SerializeObject(new
                 {
                     algoritm.grid_size,
                     algoritm.walls,
@@ -125,7 +139,7 @@ public static class Menu
         }
     }
 
-    // метод выполнения решения двумя алгоритмами
+    // solution
     public static void FindSolution()
     {
         if (algoritm.EmptyFlag)
@@ -166,7 +180,7 @@ public static class Menu
         }
     }
 
-    // метод записи решения в файл
+    // save into file
     private static void WriteInFile()
     {
         var path = string.Empty;
@@ -192,6 +206,7 @@ public static class Menu
                 // вводим имя файла
                 FillGraph.DefineFileName(out path);
                 algoritm.AlgoSearch(algoritm.Type["AStar"]);
+                AnsiConsole.Markup($"file is {path}\n");
                 File.WriteAllText(path, bufferString);
                 AnsiConsole.Markup("[darkgreen]File recorded[/]\n");
                 break;
@@ -205,5 +220,22 @@ public static class Menu
         // сбрасываем запись в файл на вывод на экран
         algoritm.ResetAction();
         MainMenu();
+    }
+
+    // load testing
+    public static void RunLoadingTests()
+    {
+        //int width = 5;
+        //int height = 6;
+        //int walls_percent = 70;
+        //string algo_name = "AStar";
+        //bool[,] grid;
+        //int[][] walls;
+        //LoadTesting.GenerateGridByParams(out grid, out walls, width, height, walls_percent);
+        //int time_in_ms = LoadTesting.GenerateSolution(grid, walls, algo_name);
+        //Console.Write("Total execution time in ms: ");
+        //Console.WriteLine(time_in_ms);
+        // Dictionary<int, int> result = LoadTesting.ChangeWallsPercent("AStar");
+        // Console.WriteLine(result);
     }
 }
