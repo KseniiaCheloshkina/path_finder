@@ -101,8 +101,6 @@ public class Algoritms
     public void AlgoSearch(string distance_type)
     {
         BuildTree(distance_type);
-        WriteSolving();
-
     }
 
     public Cell min_distance_cell(List<Cell> list_cells, string distance_type)
@@ -205,7 +203,7 @@ public class Algoritms
         return nodes;
     }
 
-    private void WriteSolving()
+    public void DrawResultingGraph()
     {
         if (Action == null) return;
 

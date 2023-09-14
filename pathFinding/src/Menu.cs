@@ -8,12 +8,12 @@ public static class Menu
     private static Algoritms algoritm = new Algoritms();
 
     public static string FilePath(string file) {
-        string dataFolder = Path.Combine("Data");
+        string dataFolder = Path.Combine("..", "..", "..", "Data");
         return Path.Combine(dataFolder,file);
     }
 
     public static string FilePath(string folder, string file) {
-        string dataFolder = Path.Combine("Data");
+        string dataFolder = Path.Combine("..", "..", "..", "Data");
         return Path.Combine(dataFolder, folder, file);
     }
 
@@ -23,13 +23,13 @@ public static class Menu
         var operation = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
                 .Title("Choose an operation?")
-                .PageSize(5)
+                .PageSize(6)
                 .HighlightStyle(highlightStyle)
                 .AddChoices(new[] {
                     "Set data",
                     "Find a solution",
-                    "Help",
                     "Load testing",
+                    "Help",
                     "Exit"
                 }));
         
@@ -165,10 +165,12 @@ public static class Menu
         {
             case "Algo AStar":
                 algoritm.AlgoSearch(algoritm.Type["AStar"]);
+                algoritm.DrawResultingGraph();
                 MainMenu();
                 break;
             case "Algo Dijkstra":
                 algoritm.AlgoSearch(algoritm.Type["Dijkstra"]);
+                algoritm.DrawResultingGraph();
                 MainMenu();
                 break;
             case "Save result to file":
@@ -225,17 +227,25 @@ public static class Menu
     // load testing
     public static void RunLoadingTests()
     {
-        //int width = 5;
-        //int height = 6;
-        //int walls_percent = 70;
-        //string algo_name = "AStar";
-        //bool[,] grid;
-        //int[][] walls;
-        //LoadTesting.GenerateGridByParams(out grid, out walls, width, height, walls_percent);
-        //int time_in_ms = LoadTesting.GenerateSolution(grid, walls, algo_name);
-        //Console.Write("Total execution time in ms: ");
-        //Console.WriteLine(time_in_ms);
-        // Dictionary<int, int> result = LoadTesting.ChangeWallsPercent("AStar");
-        // Console.WriteLine(result);
+        // run with different percantage of walls
+        //Dictionary<int, Dictionary<string, int>> results = LoadTesting.ChangeWallsPercent();
+        // File.WriteAllText(FilePath("results","change_percent.json"), JsonConvert.SerializeObject(results));
+
+        // run with different grid size
+        //Dictionary<int, Dictionary<string, int>> results = LoadTesting.ChangeGridSize();
+        //File.WriteAllText(FilePath("results","change_width.json"), JsonConvert.SerializeObject(results));
+
+        // run 30 repeats with tha same parameters to estimate latency of 2 algos
+        //Dictionary<int, Dictionary<string, int>> results = LoadTesting.GetStatsForCI(30);
+        //File.WriteAllText(FilePath("results","ci_repeats.json"), JsonConvert.SerializeObject(results));
+
+        // simple one run
+        int walls_percent = 20;
+        int width = 200;
+        int height = 200;
+        bool[,] grid;
+        int[,] walls;
+        LoadTesting.GenerateGridByParams(out grid, out walls, width, height, walls_percent);
+        int time_in_ms_astar = LoadTesting.GenerateSolution(grid, walls, "AStar");
     }
 }
